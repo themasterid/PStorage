@@ -1,0 +1,10 @@
+altgraph==0.17   
+pip==20.0.2 
+pkg-resources==0.0.0  
+pyinstaller==4.2    
+pyinstaller-hooks-contrib==2020.11
+PyQt5==5.15.2 
+PyQt5-sip==12.8.1 
+pysqlcipher3==1.0.3  
+setuptools==44.0.0
+
