@@ -14,11 +14,11 @@ in C:\OpenSSL-Win64 or C:\OpenSSL-Win64 directory.
 
 for x86:
 
->SET OPENSSL_CONF=C:\OpenSSL-Win32\bin\openssl.cfg
+> SET OPENSSL_CONF=C:\OpenSSL-Win32\bin\openssl.cfg
 
 or for x64:
 
->SET OPENSSL_CONF=C:\OpenSSL-Win64\bin\openssl.cfg
+> SET OPENSSL_CONF=C:\OpenSSL-Win64\bin\openssl.cfg
 
 and for x86: 
 
