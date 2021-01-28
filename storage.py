@@ -13,10 +13,10 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MyWindow()
         self.ui.setupUi(self)
 
-        self.connDB()  # decrypt the table using the key
+        self.connDB() # decrypt the table using the key
         # Create table first, second comment this strings in the future, 
         # do not download data from json, but through the GUI form.
-        # self.create_table_new('db.json')        
+        #self.create_table_new('db.json')
         self.ui.listWidget.setCurrentRow(0)
         self.ui.listWidget.addItems(self.get_items_names())
         hide_text_from_changes(self)
@@ -29,7 +29,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
     def connDB(self):
         self.conn = sqlite3.connect('db.sqlite')
         self.cur = self.conn.cursor()
-        self.cur.execute("PRAGMA key='secretmegasecretkey12345'")
+        self.cur.execute("PRAGMA key='123'")
 
     # get name who send signal on press btn
     def who_btn_clicked(self):
