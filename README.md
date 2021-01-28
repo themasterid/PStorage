@@ -14,20 +14,20 @@ in C:\OpenSSL-Win64 or C:\OpenSSL-Win64 directory.
 
 3. Add in use Visual Studio 2019 Developer Command Prompt v16.8.4 (menu - x86 Native Tools Command Prompt for VS 2019) this
 
-   for x86:
+   for x86
 ```
 SET OPENSSL_CONF=C:\OpenSSL-Win32\bin\openssl.cfg
 ```
-   or for x64:
+   or for x64
 ```
 SET OPENSSL_CONF=C:\OpenSSL-Win64\bin\openssl.cfg
 ```
-   and for x86: 
+   and for x86 
 ```
 set LIB=C:\OpenSSL-Win32\lib;%LIB%
 set INCLUDE=C:\OpenSSL-Win32\include;%INCLUDE%
 ```
-   or for x64:
+	or for x64
 ```
 set LIB=C:\OpenSSL-Win64\lib";%LIB%
 set INCLUDE=C:\OpenSSL-Win64\include";%INCLUDE%
