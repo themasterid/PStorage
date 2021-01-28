@@ -7,12 +7,12 @@ Work in Windows 10 x64. and Linux Mint 20 x64!
  
 For compile sqlcipher in Windows 10 and install pysqlcipher3 in system pip see this readme:
 
-1. Install python 3.6 x64 or x86.
+#1. Install python 3.6 x64 or x86.
 
-2. Install Win64 OpenSSL v1.1.1i or Win32 OpenSSL v1.1.1i: https://slproweb.com/products/Win32OpenSSL.html
+#2. Install Win64 OpenSSL v1.1.1i or Win32 OpenSSL v1.1.1i: https://slproweb.com/products/Win32OpenSSL.html
 in C:\OpenSSL-Win64 or C:\OpenSSL-Win64 directory.
 
-3. Add in use Visual Studio 2019 Developer Command Prompt v16.8.4 (menu - x86 Native Tools Command Prompt for VS 2019) this
+#3. Add in use Visual Studio 2019 Developer Command Prompt v16.8.4 (menu - x86 Native Tools Command Prompt for VS 2019) this
 
 for x86:
 
