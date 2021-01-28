@@ -5,38 +5,38 @@ To create a database, use your key to decrypt the data in the database.
 
 Work in Windows 10 x64. and Linux Mint 20 x64!
  
-For compile sqlcipher in Windows 10 and install pysqlcipher3 in system pip see this readme:
+For compile `sqlcipher` in `Windows 10` and install `pysqlcipher3` in system `pip` see this readme:
 
-1. Install python 3.6 x64 or x86.
+1. Install `python 3.6 x64` or x86.
 
-2. Install Win64 OpenSSL v1.1.1i or Win32 OpenSSL v1.1.1i: https://slproweb.com/products/Win32OpenSSL.html
+2. Install `Win64 OpenSSL v1.1.1i` or `Win32 OpenSSL` v1.1.1i: https://slproweb.com/products/Win32OpenSSL.html
 in C:\OpenSSL-Win64 or C:\OpenSSL-Win64 directory.
 
-3. Add in use Visual Studio 2019 Developer Command Prompt v16.8.4 (menu - x86 Native Tools Command Prompt for VS 2019) this
+3. Add in use `Visual Studio 2019 Developer Command Prompt v16.8.4` (menu - `x86 Native Tools Command Prompt for VS 2019`) this commands:
 
-   for x86
+for x86:
 ```
 SET OPENSSL_CONF=C:\OpenSSL-Win32\bin\openssl.cfg
 ```
-   or for x64
+or for x64:
 ```
 SET OPENSSL_CONF=C:\OpenSSL-Win64\bin\openssl.cfg
 ```
-   and for x86 
+and for x86 :
 ```
 set LIB=C:\OpenSSL-Win32\lib;%LIB%
 set INCLUDE=C:\OpenSSL-Win32\include;%INCLUDE%
 ```
-	or for x64
+or for x64:
 ```
 set LIB=C:\OpenSSL-Win64\lib";%LIB%
 set INCLUDE=C:\OpenSSL-Win64\include";%INCLUDE%
 ```
 4. Install ActiveTcl from https://www.activestate.com/products/tcl/.
 
-5. Install Visual Studio 2019 for build sqlite3.c sources.
+5. Install `Visual Studio 2019` for build 'sqlite3.c' sources.
 
-6. Clone SQLCipher from GitHub use Visual Studio 2019 Developer Command Prompt v16.8.4 (menu - x86 Native Tools Command Prompt for VS 2019):
+6. Clone `SQLCipher` from `GitHub` use `Visual Studio 2019 Developer Command Prompt v16.8.4` (menu - `x86 Native Tools Command Prompt for VS 2019`):
 ```
 mkdir SQLCipher
 cd SQLCipher
@@ -46,7 +46,7 @@ cd sqlcipher
 nmake /f Makefile.msc clean
 nmake /f Makefile.msc
 ```
-The final compilation will report an error, it's does not matter, just copy sqlite3.c, sqlite3.h files.
+The final compilation will report an error, it's does not matter, just copy `sqlite3.c`, `sqlite3.h` files.
 ```
 cd ..
 git clone https://github.com/rigglemania/pysqlcipher3.git
@@ -56,24 +56,24 @@ cd amalgamation
 mkdir sqlcipher
 cd ..
 ```
-put in /amalgamation, /amalgamation/sqlcipher and /sqlcipher/sqlcipher folders this sqlite3.c, sqlite3.h files.
+put in `/amalgamation`, `/amalgamation/sqlcipher` and `/sqlcipher/sqlcipher` folders this `sqlite3.c`, `sqlite3.h` files.
 
 Example:
 
 - SQLCipher/pysqlcipher3/amalgamation
-	- sqlite3.c
-	- sqlite3.h
+	- `sqlite3.c`
+	- `sqlite3.h`
 - SQLCipher/pysqlcipher3/amalgamation/sqlcipher
-	- sqlite3.c
-	- sqlite3.h
+	- `sqlite3.c`
+	- `sqlite3.h`
 	
 - SQLCipher/pysqlcipher3/sqlcipher/sqlcipher
-	- sqlite3.c
-	- sqlite3.h
+	- `sqlite3.c`
+	- `sqlite3.h`
 
-Go to directory /SQLCipher/pysqlcipher3
+Go to directory `/SQLCipher/pysqlcipher3`
 
-And in Native Tools Command Prompt for VS 2019 run:
+And in `Native Tools Command Prompt for VS 2019` run:
 ```
 >python setup.py build_amalgamation
 -----------------------------------------------
@@ -92,7 +92,7 @@ Finished generating code
 
    try done in point 3.
 
-7. Next step, Native Tools Command Prompt for VS 2019 run:
+7. Next step, `Native Tools Command Prompt for VS 2019` run:
 ```
 python setup.py install
 -----------------------------------------------
