@@ -28,16 +28,16 @@ set LIB=C:\OpenSSL-Win32\lib;%LIB%
 set INCLUDE=C:\OpenSSL-Win32\include;%INCLUDE%
 ```
 or for x64:
-
+```
 set LIB=C:\OpenSSL-Win64\lib";%LIB%
 set INCLUDE=C:\OpenSSL-Win64\include";%INCLUDE%
-
+```
 4. Install ActiveTcl from https://www.activestate.com/products/tcl/.
 
 5. Install Visual Studio 2019 for build sqlite3.c sources.
 
 6. Clone SQLCipher from GitHub use Visual Studio 2019 Developer Command Prompt v16.8.4 (menu - x86 Native Tools Command Prompt for VS 2019):
-
+```
 mkdir SQLCipher
 cd SQLCipher
 git clone https://github.com/sqlcipher/sqlcipher.git
@@ -45,9 +45,9 @@ cd C:\Users\broot\Documents\GitHub\SQLCipher\sqlcipher
 cd sqlcipher
 nmake /f Makefile.msc clean
 nmake /f Makefile.msc
-
+```
 The final compilation will report an error, it's does not matter, just copy sqlite3.c, sqlite3.h files.
-
+```
 cd ..
 git clone https://github.com/rigglemania/pysqlcipher3.git
 cd pysqlcipher3
@@ -55,7 +55,7 @@ mkdir amalgamation
 cd amalgamation
 mkdir sqlcipher
 cd ..
-
+```
 put in /amalgamation, /amalgamation/sqlcipher and /sqlcipher/sqlcipher folders this sqlite3.c, sqlite3.h files.
 
 Example:
@@ -74,7 +74,7 @@ Example:
 Go to directory /SQLCipher/pysqlcipher3
 
 And in Native Tools Command Prompt for VS 2019 run:
-
+```
 >python setup.py build_amalgamation
 -----------------------------------------------
 running build_amalgamation
@@ -85,15 +85,15 @@ Creating library build\temp.win-amd64-3.6\Release\src\python3\_sqlite3.cp36-win_
 Generating code
 Finished generating code
 -----------------------------------------------
-
+```
 (if you see: 
-fatal error C1083: Cannot open include file: 'openssl/rand.h': No such file or directory
+```fatal error C1083: Cannot open include file: 'openssl/rand.h': No such file or directory```
 )
 
 try done in point 3.
 
 7. Next step, Native Tools Command Prompt for VS 2019 run:
-
+```
 python setup.py install
 -----------------------------------------------
 running install
@@ -108,23 +108,25 @@ Installed c:\users\__YOURUSER__\appdata\local\programs\python\python36\lib\site-
 Processing dependencies for pysqlcipher3==1.0.3
 Finished processing dependencies for pysqlcipher3==1.0.3
 -----------------------------------------------
+```
 
 7. Try run this commands in cmd:
-
+```
 pip list
 Package                   Version
 ------------------------- ------------
 ...
 pysqlcipher3              1.0.3
 ...
-
+```
+```
 python -V
 Python 3.6.0
-
+```
 python
 Python 3.6.0 (v3.6.0:41df79263a11, Dec 23 2016, 08:06:12) [MSC v.1900 64 bit (AMD64)] on win32
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from pysqlcipher3 import dbapi2 as sqlite3
 >>>
-
+```
 Its work! :)
