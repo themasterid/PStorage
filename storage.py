@@ -3,7 +3,7 @@ import json
 from myui import Ui_MyWindow
 from PyQt5 import QtWidgets
 import sys
-from funcs.functions import hide_text_from_changes, btns_edit_click, btns_save_click
+from funcs.functions import hide_text_from_changes, btns_edit_click, btns_save_click, btns_get_text_click
 
 
 class SoyleWindow(QtWidgets.QMainWindow):
@@ -13,20 +13,77 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MyWindow()
         self.ui.setupUi(self)
 
-        self.connDB() # decrypt the table using the key
+        self.open_key_DB() # decrypt the table using the key
         # Create table first, second comment this strings in the future, 
         # do not download data from json, but through the GUI form.
         #self.create_table_new('db.json')
         self.ui.listWidget.setCurrentRow(0)
         self.ui.listWidget.addItems(self.get_items_names())
         hide_text_from_changes(self)
-        self.ui.listWidget.currentRowChanged.connect(self.click)
+        self.ui.listWidget.currentRowChanged.connect(self.change_list_items)      
+
+        btns_get_text_click(self)
         btns_edit_click(self) # edit from base
         btns_save_click(self) # save in base
+
         self.cur.close()
 
+    def copy_from_text(self):
+        sender_get_copy = self.sender()  # who send signal
+        if sender_get_copy.objectName() == 'pushButton_Name_Get':
+            self.ui.textEdit_Name.selectAll()
+            self.ui.textEdit_Name.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Login_Get':
+            self.ui.textEdit_Login.selectAll()
+            self.ui.textEdit_Login.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Password_Get':
+            self.ui.textEdit_Password.selectAll()
+            self.ui.textEdit_Password.copy()
+        elif sender_get_copy.objectName() == 'pushButton_OldPassword_Get':
+            self.ui.textEdit_OldPassword.selectAll()
+            self.ui.textEdit_OldPassword.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Email_Get':
+            self.ui.textEdit_Email.selectAll()
+            self.ui.textEdit_Email.copy()
+        elif sender_get_copy.objectName() == 'pushButton_OldEmail_Get':
+            self.ui.textEdit_OldEmail.selectAll()
+            self.ui.textEdit_OldEmail.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Quation_Get':
+            self.ui.textEdit_Quation.selectAll()
+            self.ui.textEdit_Quation.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Answer_Get':
+            self.ui.textEdit_Answer.selectAll()
+            self.ui.textEdit_Answer.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Code_Get':
+            self.ui.textEdit_Code.selectAll()
+            self.ui.textEdit_Code.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Phone_Get':
+            self.ui.textEdit_Phone.selectAll()
+            self.ui.textEdit_Phone.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Recoverycode_Get':
+            self.ui.textEdit_Recoverycode.selectAll()
+            self.ui.textEdit_Recoverycode.copy()
+        elif sender_get_copy.objectName() == 'pushButton_FIO_Get':
+            self.ui.textEdit_FIO.selectAll()
+            self.ui.textEdit_FIO.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Country_Get':
+            self.ui.textEdit_Country.selectAll()
+            self.ui.textEdit_Country.copy()
+        elif sender_get_copy.objectName() == 'pushButton_State_Get':
+            self.ui.textEdit_State.selectAll()
+            self.ui.textEdit_State.copy()
+        elif sender_get_copy.objectName() == 'pushButton_City_Get':
+            self.ui.textEdit_City.selectAll()
+            self.ui.textEdit_City.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Addres_Get':
+            self.ui.textEdit_Addres.selectAll()
+            self.ui.textEdit_Addres.copy()
+        elif sender_get_copy.objectName() == 'pushButton_ZipCode_Get':
+            self.ui.textEdit_ZipCode.selectAll()
+            self.ui.textEdit_ZipCode.copy()
+
     # decrypt the table using the key
-    def connDB(self):
+    def open_key_DB(self):
         self.conn = sqlite3.connect('db.sqlite')
         self.cur = self.conn.cursor()
         self.cur.execute("PRAGMA key='123'")
@@ -173,7 +230,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
             list_names.append(get_name[_][0] + " (" + get_name[_][1] + ")")
         return list_names
 
-    def click(self):
+    def change_list_items(self):
         hide_text_from_changes(self)
         rows = self.ui.listWidget.currentRow()
         texts = self.view_table_by_IDs(str(rows))
@@ -201,7 +258,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
         return self.cur.fetchmany(0)
 
     def open_json_file(self, fname):
-        self.fname = fname
+        self.fname = fname           
         with open(self.fname, 'r', encoding='utf-8') as read_json_file:
             data_json = json.load(read_json_file)
             read_json_file.close()
