@@ -6,7 +6,6 @@ from PyQt5 import QtWidgets, QtCore, QtWidgets
 import sys
 from funcs.functions import hide_text_from_changes, btns_edit_click, btns_save_click, btns_get_text_click
 
-
 class MainWindow(QtWidgets.QWidget):
 
     switch_on_soylewindow = QtCore.pyqtSignal(str)
@@ -33,10 +32,12 @@ class MainWindow(QtWidgets.QWidget):
     def open_key_DB(self, key):        
         self.conn = sqlite3.connect('db.sqlite')
         self.cur = self.conn.cursor()
-        self.cur.execute(f"PRAGMA key={key}")
+        #self.cur.execute(f"PRAGMA key={key}")
+        self.cur.execute(f"PRAGMA key='123'")
 
     def switch(self):
-        global key
+        #global key
+        '''
         key = self.line_edit_login.text()
         if key == '' or len(key) > 10:
             return
@@ -51,9 +52,8 @@ class MainWindow(QtWidgets.QWidget):
             self.cur.close()        
         except pysqlcipher3.dbapi2.DatabaseError:
             return
-
+        '''
         self.switch_on_soylewindow.emit(self.line_edit_login.text())
-        return
 
 class Controller():
     def __init__(self):
@@ -75,10 +75,11 @@ class SoyleWindow(QtWidgets.QMainWindow):
         super(SoyleWindow, self).__init__()
         self.ui = Ui_MyWindow()
         self.ui.setupUi(self)
+        key = '123'
         self.open_key_DB(key) # decrypt the table using the key
         # Create table first, second comment this strings in the future, 
         # do not download data from json, but through the GUI form.
-        #self.create_table_new('db.json')
+        self.create_table_new('db.json')
         self.ui.listWidget.setCurrentRow(0)
         self.ui.listWidget.addItems(self.get_items_names())
         hide_text_from_changes(self)
@@ -244,47 +245,27 @@ class SoyleWindow(QtWidgets.QMainWindow):
     def update_to_table(self, new_names_text):
         self.cur = self.conn.cursor()
         rows = self.ui.listWidget.currentRow()
-        update = '''UPDATE db SET
-        id = '{0}', 
-        Name = '{1}',
-        Login = '{2}',
-        Password = '{3}',
-        OldPassword = '{4}',
-        Email = '{5}',
-        OldEmail = '{6}',
-        Quation = '{7}',
-        Answer = "{8}",
-        Code = '{9}',
-        Phone = '{10}',
-        Recoverycode = '{11}',
-        FIO = '{12}',
-        Country = '{13}',
-        State = '{14}',
-        City = '{15}',
-        Addres = '{16}',
-        ZipCode = '{17}'  
+        update = f'''UPDATE db SET
+        id = '{new_names_text[0]}', 
+        Name = '{new_names_text[1]}',
+        Login = '{new_names_text[2]}',
+        Password = '{new_names_text[3]}',
+        OldPassword = '{new_names_text[4]}',
+        Email = '{new_names_text[5]}',
+        OldEmail = '{new_names_text[6]}',
+        Quation = '{new_names_text[7]}',
+        Answer = "{new_names_text[8]}",
+        Code = '{new_names_text[9]}',
+        Phone = '{new_names_text[10]}',
+        Recoverycode = '{new_names_text[11]}',
+        FIO = '{new_names_text[12]}',
+        Country = '{new_names_text[13]}',
+        State = '{new_names_text[14]}',
+        City = '{new_names_text[15]}',
+        Addres = '{new_names_text[16]}',
+        ZipCode = '{new_names_text[17]}'  
         WHERE 
-        ID == {18};
-        '''.format(
-            new_names_text[0],
-            new_names_text[1],
-            new_names_text[2],
-            new_names_text[3],
-            new_names_text[4],
-            new_names_text[5],
-            new_names_text[6],
-            new_names_text[7],
-            new_names_text[8],
-            new_names_text[9],
-            new_names_text[10],
-            new_names_text[11],
-            new_names_text[12],
-            new_names_text[13],
-            new_names_text[14],
-            new_names_text[15],
-            new_names_text[16],
-            new_names_text[17],
-            rows)
+        ID == {rows};'''
         self.cur.execute(update)
         self.conn.commit()
 
@@ -361,10 +342,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
             City = fh[key][0]["City"]
             Addres = fh[key][0]["Addres"]
             ZipCode = fh[key][0]["Zip Code"]
-            self.cur.execute(
-                '''INSERT INTO db ( id, Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode ) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );''',
-                (int(key), Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode))
+            self.cur.execute(f'INSERT INTO db (id, Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode) VALUES ({int(key)}, {Name}, {Login}, {Password}, {OldPassword}, {Email}, {OldEmail}, {Quation}, {Answer}, {Code}, {Phone}, {Recoverycode}, {FIO}, {Country}, {State}, {City}, {Addres}, {ZipCode})')
         return self.conn.commit()
 
 def main():
