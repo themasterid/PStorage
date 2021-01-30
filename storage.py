@@ -1,9 +1,11 @@
 from pysqlcipher3 import dbapi2 as sqlite3
+import pysqlcipher3
 import json
 from myui import Ui_MyWindow
 from PyQt5 import QtWidgets, QtCore, QtWidgets
 import sys
 from funcs.functions import hide_text_from_changes, btns_edit_click, btns_save_click, btns_get_text_click
+
 
 class MainWindow(QtWidgets.QWidget):
 
@@ -11,7 +13,6 @@ class MainWindow(QtWidgets.QWidget):
 
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
-
         self.setWindowTitle('Авторизация')
         self.setMinimumSize(QtCore.QSize(241, 72))
         self.setMaximumSize(QtCore.QSize(241, 72))
@@ -28,14 +29,33 @@ class MainWindow(QtWidgets.QWidget):
         layout.addWidget(self.button_enter)
 
         self.setLayout(layout)
+    
+    def open_key_DB(self, key):        
+        self.conn = sqlite3.connect('db.sqlite')
+        self.cur = self.conn.cursor()
+        self.cur.execute(f"PRAGMA key={key}")
 
     def switch(self):
-        if self.line_edit_login.text() == '123':
-            return self.switch_on_soylewindow.emit(self.line_edit_login.text())
-        else:
+        global key
+        key = self.line_edit_login.text()
+        if key == '' or len(key) > 10:
             return
 
-class Controller:
+        try:
+            self.open_key_DB(key)
+        except pysqlcipher3.dbapi2.OperationalError:
+            return
+        
+        try:
+            self.cur.execute("SELECT * FROM db;")
+            self.cur.close()        
+        except pysqlcipher3.dbapi2.DatabaseError:
+            return
+
+        self.switch_on_soylewindow.emit(self.line_edit_login.text())
+        return
+
+class Controller():
     def __init__(self):
         pass
 
@@ -49,20 +69,13 @@ class Controller:
         self.window.close()
         self.window_two.show()
 
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-    controller = Controller()
-    controller.show_main_window()
-    sys.exit(app.exec_())
-
 class SoyleWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
         super(SoyleWindow, self).__init__()
         self.ui = Ui_MyWindow()
         self.ui.setupUi(self)
-
-        self.open_key_DB() # decrypt the table using the key
+        self.open_key_DB(key) # decrypt the table using the key
         # Create table first, second comment this strings in the future, 
         # do not download data from json, but through the GUI form.
         #self.create_table_new('db.json')
@@ -76,6 +89,11 @@ class SoyleWindow(QtWidgets.QMainWindow):
         btns_save_click(self) # save in base
 
         self.cur.close()
+    
+    def open_key_DB(self, key):        
+        self.conn = sqlite3.connect('db.sqlite')
+        self.cur = self.conn.cursor()
+        self.cur.execute(f"PRAGMA key={key}")
 
     def copy_from_text(self):
         sender_get_copy = self.sender()  # who send signal
@@ -132,10 +150,10 @@ class SoyleWindow(QtWidgets.QMainWindow):
             self.ui.textEdit_ZipCode.copy()
 
     # decrypt the table using the key
-    def open_key_DB(self):
+    def open_key_DB(self, key):
         self.conn = sqlite3.connect('db.sqlite')
         self.cur = self.conn.cursor()
-        self.cur.execute("PRAGMA key='123'")
+        self.cur.execute(f"PRAGMA key={key}")
 
     # get name who send signal on press btn
     def who_btn_clicked(self):
@@ -348,6 +366,13 @@ class SoyleWindow(QtWidgets.QMainWindow):
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );''',
                 (int(key), Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode))
         return self.conn.commit()
+
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    controller = Controller()
+    controller.show_main_window()
+    sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
     main()
