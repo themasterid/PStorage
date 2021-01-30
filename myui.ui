@@ -1709,7 +1709,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Update Table ALL</string>
+     <string>Update ALL TABLE!</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_Change_KEY">

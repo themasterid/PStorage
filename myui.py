@@ -893,7 +893,7 @@ class Ui_MyWindow(object):
         self.pushButton_Password_Get.setText(_translate("MyWindow", "Get Paswd"))
         self.pushButton_State_Get.setText(_translate("MyWindow", "Get State"))
         self.pushButton_City_Get.setText(_translate("MyWindow", "Get City"))
-        self.pushButton_Update_All_Table.setText(_translate("MyWindow", "Update Table ALL"))
+        self.pushButton_Update_All_Table.setText(_translate("MyWindow", "Update ALL TABLE!"))
         self.pushButton_Change_KEY.setText(_translate("MyWindow", "Change KEY"))
         self.pushButton_ADD_ACCOUNT.setText(_translate("MyWindow", "ADD ACCOUNT"))
         self.pushButton_DELETE_ACCOUNT.setText(_translate("MyWindow", "DELETE ACCOUNT"))
