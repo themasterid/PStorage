@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 from pysqlcipher3 import dbapi2 as sqlite3
 import pysqlcipher3
 import json
