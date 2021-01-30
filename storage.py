@@ -1,10 +1,59 @@
 from pysqlcipher3 import dbapi2 as sqlite3
 import json
 from myui import Ui_MyWindow
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore, QtWidgets
 import sys
 from funcs.functions import hide_text_from_changes, btns_edit_click, btns_save_click, btns_get_text_click
 
+class MainWindow(QtWidgets.QWidget):
+
+    switch_on_soylewindow = QtCore.pyqtSignal(str)
+
+    def __init__(self):
+        QtWidgets.QWidget.__init__(self)
+
+        self.setWindowTitle('Авторизация')
+        self.setMinimumSize(QtCore.QSize(241, 72))
+        self.setMaximumSize(QtCore.QSize(241, 72))
+        self.resize(281, 99)
+        layout = QtWidgets.QGridLayout()
+
+        self.line_edit_login = QtWidgets.QLineEdit()
+        self.line_edit_login.setGeometry(QtCore.QRect(30, 20, 221, 20))
+        layout.addWidget(self.line_edit_login)
+
+        self.button_enter = QtWidgets.QPushButton('Войти в программу')
+        self.button_enter.setGeometry(QtCore.QRect(30, 50, 221, 23))
+        self.button_enter.clicked.connect(self.switch)
+        layout.addWidget(self.button_enter)
+
+        self.setLayout(layout)
+
+    def switch(self):
+        if self.line_edit_login.text() == '123':
+            return self.switch_on_soylewindow.emit(self.line_edit_login.text())
+        else:
+            return
+
+class Controller:
+    def __init__(self):
+        pass
+
+    def show_main_window(self):
+        self.window = MainWindow()
+        self.window.switch_on_soylewindow.connect(self.show_soylewindow)
+        self.window.show()
+
+    def show_soylewindow(self, text):
+        self.window_two = SoyleWindow()
+        self.window.close()
+        self.window_two.show()
+
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    controller = Controller()
+    controller.show_main_window()
+    sys.exit(app.exec_())
 
 class SoyleWindow(QtWidgets.QMainWindow):
 
@@ -300,9 +349,13 @@ class SoyleWindow(QtWidgets.QMainWindow):
                 (int(key), Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode))
         return self.conn.commit()
 
+if __name__ == '__main__':
+    main()
 
+'''    
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
     application = SoyleWindow()
     application.show()
     sys.exit(app.exec())
+'''
