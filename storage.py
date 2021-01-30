@@ -1,7 +1,7 @@
 from pysqlcipher3 import dbapi2 as sqlite3
 import pysqlcipher3
 import json
-from myui import Ui_MyWindow
+from funcs.myui import Ui_MyWindow
 from PyQt5 import QtWidgets, QtCore, QtWidgets
 import sys
 from funcs.functions import hide_text_from_changes, btns_edit_click, btns_save_click, btns_get_text_click
@@ -53,7 +53,7 @@ class MainWindow(QtWidgets.QWidget):
             self.cur.close()
         except pysqlcipher3.dbapi2.OperationalError: # table is not create, create table            
             newtable = SoyleWindow()
-            newtable.create_table_new(secury_key)
+            newtable.create_table_new()
         except pysqlcipher3.dbapi2.DatabaseError: # key is not valid            
             return self.statusBar.showMessage('ERR: KEY NOT FOUND')
         return self.switch_on_soylewindow.emit(self.line_edit_login.text())
@@ -329,7 +329,6 @@ class SoyleWindow(QtWidgets.QMainWindow):
 
     def create_table_new(self):
         global secury_key
-        print(secury_key)        
         fname = 'db.json'
         self.open_key_DB(secury_key)
         self.cur.execute('DROP TABLE IF EXISTS db')        

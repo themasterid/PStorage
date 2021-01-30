@@ -13,6 +13,13 @@
   <property name="windowTitle">
    <string>MyStorage</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>funcs/icon.ico</normaloff>funcs/icon.ico</iconset>
+  </property>
+  <property name="animated">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListWidget" name="listWidget">
     <property name="geometry">

@@ -15,6 +15,10 @@ class Ui_MyWindow(object):
     def setupUi(self, MyWindow):
         MyWindow.setObjectName("MyWindow")
         MyWindow.resize(921, 742)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("funcs/icon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MyWindow.setWindowIcon(icon)
+        MyWindow.setAnimated(False)
         self.centralwidget = QtWidgets.QWidget(MyWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.listWidget = QtWidgets.QListWidget(self.centralwidget)
