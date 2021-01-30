@@ -321,7 +321,13 @@ class SoyleWindow(QtWidgets.QMainWindow):
         return self.cur.fetchmany(0)
 
     def open_json_file(self, fname):
-        self.fname = fname           
+        self.fname = fname
+
+        try:
+            file = open(fname, 'r')
+        except FileNotFoundError:
+            return self.statusBar().showMessage('ERR: db.json not found')
+
         with open(self.fname, 'r', encoding='utf-8') as read_json_file:
             data_json = json.load(read_json_file)
             read_json_file.close()
@@ -330,6 +336,12 @@ class SoyleWindow(QtWidgets.QMainWindow):
     def create_table_new(self):
         global secury_key
         fname = 'db.json'
+        
+        try:
+            file = open(fname, 'r')
+        except FileNotFoundError:
+            return self.statusBar().showMessage('ERR: db.json not found')
+
         self.open_key_DB(secury_key)
         self.cur.execute('DROP TABLE IF EXISTS db')        
         self.cur.execute(
@@ -376,11 +388,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-'''    
-if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
-    application = SoyleWindow()
-    application.show()
-    sys.exit(app.exec())
-'''
