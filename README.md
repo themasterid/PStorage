@@ -110,8 +110,9 @@ Finished processing dependencies for pysqlcipher3==1.0.3
 ```
 
 7. Try run this commands in cmd:
-```
+
 pip list
+```
 Package                   Version
 ------------------------- ------------
 ...
