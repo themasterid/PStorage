@@ -1,10 +1,77 @@
+#! /usr/bin/python3
 from pysqlcipher3 import dbapi2 as sqlite3
+import pysqlcipher3
 import json
-from myui import Ui_MyWindow
-from PyQt5 import QtWidgets
+from funcs.myui import Ui_MyWindow
+from PyQt5 import QtWidgets, QtCore, QtWidgets
 import sys
 from funcs.functions import hide_text_from_changes, btns_edit_click, btns_save_click, btns_get_text_click
 
+class MainWindow(QtWidgets.QWidget):
+
+    switch_on_soylewindow = QtCore.pyqtSignal(str)
+
+    def __init__(self):
+        QtWidgets.QWidget.__init__(self)
+        self.setWindowTitle('Авторизация')
+        self.setMinimumSize(QtCore.QSize(241, 90))
+        self.setMaximumSize(QtCore.QSize(241, 90))
+        self.resize(280, 100)
+        layout = QtWidgets.QGridLayout()
+
+        self.line_edit_login = QtWidgets.QLineEdit()
+        self.line_edit_login.setGeometry(QtCore.QRect(30, 20, 221, 20))
+        layout.addWidget(self.line_edit_login)
+
+        self.button_enter = QtWidgets.QPushButton('Войти в программу')
+        self.button_enter.setGeometry(QtCore.QRect(30, 50, 221, 23))
+        self.button_enter.clicked.connect(self.switch)
+        layout.addWidget(self.button_enter)
+
+        self.statusBar = QtWidgets.QStatusBar()
+        self.statusBar.setGeometry(QtCore.QRect(30, 80, 221, 26))
+        layout.addWidget(self.statusBar)
+
+        self.setLayout(layout)
+    
+    def open_key_DB(self, secury_key):        
+        self.conn = sqlite3.connect('db.sqlite')
+        self.cur = self.conn.cursor()
+        self.cur.execute(f"PRAGMA key={secury_key}")
+
+    def switch(self):
+        global secury_key        
+        secury_key = self.line_edit_login.text()
+        if secury_key == '' or len(secury_key) > 10:            
+            return self.statusBar.showMessage('ERR: EMPTY STRING') 
+        try:
+            self.open_key_DB(secury_key)
+        except pysqlcipher3.dbapi2.OperationalError:
+            return self.statusBar.showMessage('ERR: NOT VALID')
+        try:            
+            self.open_key_DB(secury_key)
+            self.cur.execute("SELECT * FROM db;")
+            self.cur.close()
+        except pysqlcipher3.dbapi2.OperationalError: # table is not create, create table            
+            newtable = SoyleWindow()
+            newtable.create_table_new()
+        except pysqlcipher3.dbapi2.DatabaseError: # key is not valid            
+            return self.statusBar.showMessage('ERR: KEY NOT FOUND')
+        return self.switch_on_soylewindow.emit(self.line_edit_login.text())
+
+class Controller():
+    def __init__(self):
+        pass
+
+    def show_main_window(self):
+        self.window = MainWindow()
+        self.window.switch_on_soylewindow.connect(self.show_soylewindow)
+        self.window.show()
+
+    def show_soylewindow(self, text):
+        self.window_two = SoyleWindow()
+        self.window.close()
+        self.window_two.show()
 
 class SoyleWindow(QtWidgets.QMainWindow):
 
@@ -12,11 +79,12 @@ class SoyleWindow(QtWidgets.QMainWindow):
         super(SoyleWindow, self).__init__()
         self.ui = Ui_MyWindow()
         self.ui.setupUi(self)
-
-        self.open_key_DB() # decrypt the table using the key
+        #global key
+        self.open_key_DB(secury_key) # decrypt the table using the key
         # Create table first, second comment this strings in the future, 
         # do not download data from json, but through the GUI form.
-        #self.create_table_new('db.json')
+        
+        self.ui.pushButton_Update_All_Table.clicked.connect(self.create_table_new)
         self.ui.listWidget.setCurrentRow(0)
         self.ui.listWidget.addItems(self.get_items_names())
         hide_text_from_changes(self)
@@ -27,6 +95,11 @@ class SoyleWindow(QtWidgets.QMainWindow):
         btns_save_click(self) # save in base
 
         self.cur.close()
+    
+    def open_key_DB(self, secury_key):        
+        self.conn = sqlite3.connect('db.sqlite')
+        self.cur = self.conn.cursor()
+        self.cur.execute(f"PRAGMA key={secury_key}")
 
     def copy_from_text(self):
         sender_get_copy = self.sender()  # who send signal
@@ -83,10 +156,10 @@ class SoyleWindow(QtWidgets.QMainWindow):
             self.ui.textEdit_ZipCode.copy()
 
     # decrypt the table using the key
-    def open_key_DB(self):
+    def open_key_DB(self, secury_key):        
         self.conn = sqlite3.connect('db.sqlite')
         self.cur = self.conn.cursor()
-        self.cur.execute("PRAGMA key='123'")
+        self.cur.execute(f"PRAGMA key={secury_key}")
 
     # get name who send signal on press btn
     def who_btn_clicked(self):
@@ -177,53 +250,37 @@ class SoyleWindow(QtWidgets.QMainWindow):
     def update_to_table(self, new_names_text):
         self.cur = self.conn.cursor()
         rows = self.ui.listWidget.currentRow()
-        update = '''UPDATE db SET
-        id = '{0}', 
-        Name = '{1}',
-        Login = '{2}',
-        Password = '{3}',
-        OldPassword = '{4}',
-        Email = '{5}',
-        OldEmail = '{6}',
-        Quation = '{7}',
-        Answer = "{8}",
-        Code = '{9}',
-        Phone = '{10}',
-        Recoverycode = '{11}',
-        FIO = '{12}',
-        Country = '{13}',
-        State = '{14}',
-        City = '{15}',
-        Addres = '{16}',
-        ZipCode = '{17}'  
+        update = f'''UPDATE db SET
+        id = '{new_names_text[0]}', 
+        Name = '{new_names_text[1]}',
+        Login = '{new_names_text[2]}',
+        Password = '{new_names_text[3]}',
+        OldPassword = '{new_names_text[4]}',
+        Email = '{new_names_text[5]}',
+        OldEmail = '{new_names_text[6]}',
+        Quation = '{new_names_text[7]}',
+        Answer = "{new_names_text[8]}",
+        Code = '{new_names_text[9]}',
+        Phone = '{new_names_text[10]}',
+        Recoverycode = '{new_names_text[11]}',
+        FIO = '{new_names_text[12]}',
+        Country = '{new_names_text[13]}',
+        State = '{new_names_text[14]}',
+        City = '{new_names_text[15]}',
+        Addres = '{new_names_text[16]}',
+        ZipCode = '{new_names_text[17]}'  
         WHERE 
-        ID == {18};
-        '''.format(
-            new_names_text[0],
-            new_names_text[1],
-            new_names_text[2],
-            new_names_text[3],
-            new_names_text[4],
-            new_names_text[5],
-            new_names_text[6],
-            new_names_text[7],
-            new_names_text[8],
-            new_names_text[9],
-            new_names_text[10],
-            new_names_text[11],
-            new_names_text[12],
-            new_names_text[13],
-            new_names_text[14],
-            new_names_text[15],
-            new_names_text[16],
-            new_names_text[17],
-            rows)
+        ID == {rows};'''
         self.cur.execute(update)
         self.conn.commit()
 
     # Get items name
     def get_items_names(self):
-        self.cur.execute("SELECT Name, Login FROM db;")
+        try:
+            self.cur.execute("SELECT Name, Login FROM db;")
+        except pysqlcipher3.dbapi2.OperationalError:
+            list_names = ['empty']
+            return list_names
         get_name = self.cur.fetchmany(0)
         list_names = []
         for _ in range(len(get_name)):
@@ -234,6 +291,10 @@ class SoyleWindow(QtWidgets.QMainWindow):
         hide_text_from_changes(self)
         rows = self.ui.listWidget.currentRow()
         texts = self.view_table_by_IDs(str(rows))
+        try:
+            self.ui.textEdit_Name.setPlainText(texts[0][1])
+        except TypeError:
+            return
         self.ui.textEdit_Name.setPlainText(texts[0][1])
         self.ui.textEdit_Login.setPlainText(texts[0][2])
         self.ui.textEdit_Password.setPlainText(texts[0][3])
@@ -254,18 +315,36 @@ class SoyleWindow(QtWidgets.QMainWindow):
 
     def view_table_by_IDs(self, name):
         self.cur = self.conn.cursor()
-        self.cur.execute("SELECT * FROM db WHERE ID = '{0}';".format(name))
+        try:
+            self.cur.execute("SELECT * FROM db WHERE ID = '{0}';".format(name))
+        except pysqlcipher3.dbapi2.OperationalError:
+            return
         return self.cur.fetchmany(0)
 
     def open_json_file(self, fname):
-        self.fname = fname           
+        self.fname = fname
+
+        try:
+            file = open(fname, 'r')
+        except FileNotFoundError:
+            return self.statusBar().showMessage('ERR: db.json not found')
+
         with open(self.fname, 'r', encoding='utf-8') as read_json_file:
             data_json = json.load(read_json_file)
             read_json_file.close()
         return data_json
 
-    def create_table_new(self, fname):
-        self.cur.execute('DROP TABLE IF EXISTS db')
+    def create_table_new(self):
+        global secury_key
+        fname = 'db.json'
+        
+        try:
+            file = open(fname, 'r')
+        except FileNotFoundError:
+            return self.statusBar().showMessage('ERR: db.json not found')
+
+        self.open_key_DB(secury_key)
+        self.cur.execute('DROP TABLE IF EXISTS db')        
         self.cur.execute(
             '''CREATE TABLE db (
             id INT AUTO_INCREMENT NOT NULL, Name VARCHAR(100), Login VARCHAR(100), Password VARCHAR(100), OldPassword VARCHAR(100), Email VARCHAR(300),
@@ -298,11 +377,15 @@ class SoyleWindow(QtWidgets.QMainWindow):
                 '''INSERT INTO db ( id, Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode ) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );''',
                 (int(key), Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode))
-        return self.conn.commit()
+        self.conn.commit()
+        self.cur.close()
+
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    controller = Controller()
+    controller.show_main_window()
+    sys.exit(app.exec_())
 
 
-if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
-    application = SoyleWindow()
-    application.show()
-    sys.exit(app.exec())
+if __name__ == '__main__':
+    main()
