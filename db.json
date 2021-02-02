@@ -13,11 +13,11 @@
             "Code": "Code",
             "Phone": "Phone",
             "Recovery code": "Recovery code",
-            "FIO": "FIO",
+            "Full_name": "Full_name",
             "Country": "Country",
             "State":"State",
             "City":"City",
-            "Addres":"Addres",
+            "Address":"Address",
             "Zip Code": "Zip Code"
         }
     ],
@@ -35,11 +35,11 @@
             "Code": "Code",
             "Phone": "Phone",
             "Recovery code": "Recovery code",
-            "FIO": "FIO",
+            "Full_name": "Full_name",
             "Country": "Country",
             "State":"State",
             "City":"City",
-            "Addres":"Addres",
+            "Address":"Address",
             "Zip Code": "Zip Code"
         }
     ],
@@ -57,77 +57,11 @@
             "Code": "Code",
             "Phone": "Phone",
             "Recovery code": "Recovery code",
-            "FIO": "FIO",
+            "Full_name": "Full_name",
             "Country": "Country",
             "State":"State",
             "City":"City",
-            "Addres":"Addres",
-            "Zip Code": "Zip Code"
-        }
-    ],
-    "4":
-    [
-        {
-            "Name": "Name",
-            "Login": "Login",
-            "Password": "Password",
-            "Old Password": "Old Password",
-            "Email": "Email",
-            "Old Email": "Old Email",
-            "Quation": "Quation",
-            "Answer": "Answer",
-            "Code": "Code",
-            "Phone": "Phone",
-            "Recovery code": "Recovery code",
-            "FIO": "FIO",
-            "Country": "Country",
-            "State":"State",
-            "City":"City",
-            "Addres":"Addres",
-            "Zip Code": "Zip Code"
-        }
-    ],
-    "5":
-    [
-        {
-            "Name": "Name",
-            "Login": "Login",
-            "Password": "Password",
-            "Old Password": "Old Password",
-            "Email": "Email",
-            "Old Email": "Old Email",
-            "Quation": "Quation",
-            "Answer": "Answer",
-            "Code": "Code",
-            "Phone": "Phone",
-            "Recovery code": "Recovery code",
-            "FIO": "FIO",
-            "Country": "Country",
-            "State":"State",
-            "City":"City",
-            "Addres":"Addres",
-            "Zip Code": "Zip Code"
-        }
-    ],
-    "6":
-    [
-        {
-            "Name": "Name",
-            "Login": "Login",
-            "Password": "Password",
-            "Old Password": "Old Password",
-            "Email": "Email",
-            "Old Email": "Old Email",
-            "Quation": "Quation",
-            "Answer": "Answer",
-            "Code": "Code",
-            "Phone": "Phone",
-            "Recovery code": "Recovery code",
-            "FIO": "FIO",
-            "Country": "Country",
-            "State":"State",
-            "City":"City",
-            "Addres":"Addres",
+            "Address":"Address",
             "Zip Code": "Zip Code"
         }
     ]

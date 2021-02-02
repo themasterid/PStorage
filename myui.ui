@@ -416,7 +416,7 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QTextEdit" name="textEdit_FIO">
+   <widget class="QTextEdit" name="textEdit_Full_name">
     <property name="geometry">
      <rect>
       <x>131</x>
@@ -528,7 +528,7 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QTextEdit" name="textEdit_Addres">
+   <widget class="QTextEdit" name="textEdit_Address">
     <property name="geometry">
      <rect>
       <x>131</x>
@@ -741,7 +741,7 @@
      <string>Save</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_FIO_Save">
+   <widget class="QPushButton" name="pushButton_Full_name_Save">
     <property name="geometry">
      <rect>
       <x>440</x>
@@ -895,7 +895,7 @@
      <string>Save</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_Addres_Save">
+   <widget class="QPushButton" name="pushButton_Address_Save">
     <property name="geometry">
      <rect>
       <x>440</x>
@@ -983,7 +983,7 @@
      <string>Edit</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_Addres_Edit">
+   <widget class="QPushButton" name="pushButton_Address_Edit">
     <property name="geometry">
      <rect>
       <x>520</x>
@@ -1291,7 +1291,7 @@
      <string>Edit</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_FIO_Edit">
+   <widget class="QPushButton" name="pushButton_Full_name_Edit">
     <property name="geometry">
      <rect>
       <x>520</x>
@@ -1379,7 +1379,7 @@
      <string>Get Email</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_FIO_Get">
+   <widget class="QPushButton" name="pushButton_Full_name_Get">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -1398,7 +1398,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Get FIO</string>
+     <string>Get Full name</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_Quation_Get">
@@ -1511,7 +1511,7 @@
      <string>Get Code</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_Addres_Get">
+   <widget class="QPushButton" name="pushButton_Address_Get">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -1530,7 +1530,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Get Addres</string>
+     <string>Get Address</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_Phone_Get">

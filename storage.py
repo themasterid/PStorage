@@ -35,7 +35,7 @@ class MainWindow(QtWidgets.QWidget):
         self.setLayout(layout)
     
     def open_key_DB(self, secury_key):        
-        self.conn = sqlite3.connect('db.sqlite')
+        self.conn = sqlite3.connect('database.db')
         self.cur = self.conn.cursor()
         self.cur.execute(f"PRAGMA key={secury_key}")
 
@@ -54,7 +54,7 @@ class MainWindow(QtWidgets.QWidget):
             self.cur.close()
         except pysqlcipher3.dbapi2.OperationalError: # table is not create, create table            
             newtable = SoyleWindow()
-            newtable.create_table_new()
+            newtable.upload_in_table_from_json()
         except pysqlcipher3.dbapi2.DatabaseError: # key is not valid            
             return self.statusBar.showMessage('ERR: KEY NOT FOUND')
         return self.switch_on_soylewindow.emit(self.line_edit_login.text())
@@ -68,7 +68,7 @@ class Controller():
         self.window.switch_on_soylewindow.connect(self.show_soylewindow)
         self.window.show()
 
-    def show_soylewindow(self, text):
+    def show_soylewindow(self):
         self.window_two = SoyleWindow()
         self.window.close()
         self.window_two.show()
@@ -80,9 +80,10 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MyWindow()
         self.ui.setupUi(self)
         self.open_key_DB(secury_key) # decrypt the table using the key      
-        self.ui.pushButton_Update_All_Table.clicked.connect(self.create_table_new)
+        self.ui.pushButton_Update_All_Table.clicked.connect(self.upload_in_table_from_json)
         self.ui.listWidget.setCurrentRow(0)
         self.ui.listWidget.addItems(self.get_items_names())
+        self.ui.pushButton_ADD_ACCOUNT.clicked.connect(self.create_new_account)
         hide_text_from_changes(self)
         self.ui.listWidget.currentRowChanged.connect(self.change_list_items)
         btns_get_text_click(self)
@@ -90,9 +91,60 @@ class SoyleWindow(QtWidgets.QMainWindow):
         btns_save_click(self) # save in base
 
         self.cur.close()
+
+    def create_new_account(self):
+        global secury_key
+        self.open_key_DB(secury_key)   
+        self.cur.execute(
+            '''CREATE TABLE IF NOT EXISTS db (
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            Name VARCHAR(100), 
+            Login VARCHAR(100), 
+            Password VARCHAR(100), 
+            OldPassword VARCHAR(100), 
+            Email VARCHAR(300),
+            OldEmail VARCHAR(100), 
+            Quation VARCHAR(300), 
+            Answer VARCHAR(300), 
+            Code VARCHAR(300), 
+            Phone VARCHAR(20), 
+            Recoverycode VARCHAR(300), 
+            Full_name VARCHAR(300), 
+            Country VARCHAR(100), 
+            State VARCHAR(100), 
+            City VARCHAR(100), 
+            Address VARCHAR(300), 
+            ZipCode VARCHAR(50)
+            );'''
+        )
+
+        Name = 'Edit'
+        Login = 'Me'
+        Password = 'None'
+        OldPassword = 'None'
+        Email = 'None'
+        OldEmail = 'None'
+        Quation = 'None'
+        Answer = 'None'
+        Code = 'None'
+        Phone = 'None'
+        Recoverycode = 'None'
+        Full_name = 'None'
+        Country = 'None'
+        State = 'None'
+        City = 'None'
+        Address = 'None'
+        ZipCode = 'None'
+        self.cur.execute(
+            '''INSERT INTO db ( Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, Full_name, Country, State, City, Address, ZipCode )
+            VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );''',
+            (Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, Full_name, Country, State, City, Address, ZipCode))
+        self.conn.commit()
+        self.cur.close()
+    # ------------------------------------------------------------------------------------
     
     def open_key_DB(self, secury_key):        
-        self.conn = sqlite3.connect('db.sqlite')
+        self.conn = sqlite3.connect('')
         self.cur = self.conn.cursor()
         self.cur.execute(f"PRAGMA key={secury_key}")
 
@@ -131,9 +183,9 @@ class SoyleWindow(QtWidgets.QMainWindow):
         elif sender_get_copy.objectName() == 'pushButton_Recoverycode_Get':
             self.ui.textEdit_Recoverycode.selectAll()
             self.ui.textEdit_Recoverycode.copy()
-        elif sender_get_copy.objectName() == 'pushButton_FIO_Get':
-            self.ui.textEdit_FIO.selectAll()
-            self.ui.textEdit_FIO.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Full_name_Get':
+            self.ui.textEdit_Full_name.selectAll()
+            self.ui.textEdit_Full_name.copy()
         elif sender_get_copy.objectName() == 'pushButton_Country_Get':
             self.ui.textEdit_Country.selectAll()
             self.ui.textEdit_Country.copy()
@@ -143,16 +195,16 @@ class SoyleWindow(QtWidgets.QMainWindow):
         elif sender_get_copy.objectName() == 'pushButton_City_Get':
             self.ui.textEdit_City.selectAll()
             self.ui.textEdit_City.copy()
-        elif sender_get_copy.objectName() == 'pushButton_Addres_Get':
-            self.ui.textEdit_Addres.selectAll()
-            self.ui.textEdit_Addres.copy()
+        elif sender_get_copy.objectName() == 'pushButton_Address_Get':
+            self.ui.textEdit_Address.selectAll()
+            self.ui.textEdit_Address.copy()
         elif sender_get_copy.objectName() == 'pushButton_ZipCode_Get':
             self.ui.textEdit_ZipCode.selectAll()
             self.ui.textEdit_ZipCode.copy()
 
     # decrypt the table using the key
     def open_key_DB(self, secury_key):        
-        self.conn = sqlite3.connect('db.sqlite')
+        self.conn = sqlite3.connect('database.db')
         self.cur = self.conn.cursor()
         self.cur.execute(f"PRAGMA key={secury_key}")
 
@@ -192,9 +244,9 @@ class SoyleWindow(QtWidgets.QMainWindow):
         elif sender.objectName() == 'pushButton_Recoverycode_Edit':
             hide_text_from_changes(self)
             self.ui.textEdit_Recoverycode.setDisabled(False)
-        elif sender.objectName() == 'pushButton_FIO_Edit':
+        elif sender.objectName() == 'pushButton_Full_name_Edit':
             hide_text_from_changes(self)
-            self.ui.textEdit_FIO.setDisabled(False)
+            self.ui.textEdit_Full_name.setDisabled(False)
         elif sender.objectName() == 'pushButton_Country_Edit':
             hide_text_from_changes(self)
             self.ui.textEdit_Country.setDisabled(False)
@@ -204,9 +256,9 @@ class SoyleWindow(QtWidgets.QMainWindow):
         elif sender.objectName() == 'pushButton_City_Edit':
             hide_text_from_changes(self)
             self.ui.textEdit_City.setDisabled(False)
-        elif sender.objectName() == 'pushButton_Addres_Edit':
+        elif sender.objectName() == 'pushButton_Address_Edit':
             hide_text_from_changes(self)
-            self.ui.textEdit_Addres.setDisabled(False)
+            self.ui.textEdit_Address.setDisabled(False)
         elif sender.objectName() == 'pushButton_ZipCode_Edit':
             hide_text_from_changes(self)
             self.ui.textEdit_ZipCode.setDisabled(False)
@@ -227,18 +279,18 @@ class SoyleWindow(QtWidgets.QMainWindow):
         update_text_to_table += (self.ui.textEdit_Code.toPlainText(),)
         update_text_to_table += (self.ui.textEdit_Phone.toPlainText(),)
         update_text_to_table += (self.ui.textEdit_Recoverycode.toPlainText(),)
-        update_text_to_table += (self.ui.textEdit_FIO.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Full_name.toPlainText(),)
         update_text_to_table += (self.ui.textEdit_Country.toPlainText(),)
         update_text_to_table += (self.ui.textEdit_State.toPlainText(),)
         update_text_to_table += (self.ui.textEdit_City.toPlainText(),)
-        update_text_to_table += (self.ui.textEdit_Addres.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Address.toPlainText(),)
         update_text_to_table += (self.ui.textEdit_ZipCode.toPlainText(),)
 
         if [(rows, ) + update_text_to_table] == texts:
-            self.statusBar().showMessage('Изменения не внесены')
+            self.statusBar().showMessage('No changes have been made. No changes.')
         else:
             self.update_to_table(update_text_to_table)
-            self.statusBar().showMessage('Изменения внесены')
+            self.statusBar().showMessage('Saved to the database')
 
     def update_to_table(self, update_text_to_table):
         self.cur = self.conn.cursor()
@@ -255,23 +307,23 @@ class SoyleWindow(QtWidgets.QMainWindow):
         Code = '{update_text_to_table[8]}',
         Phone = '{update_text_to_table[9]}',
         Recoverycode = '{update_text_to_table[10]}',
-        FIO = '{update_text_to_table[11]}',
+        Full_name = '{update_text_to_table[11]}',
         Country = '{update_text_to_table[12]}',
         State = '{update_text_to_table[13]}',
         City = '{update_text_to_table[14]}',
-        Addres = '{update_text_to_table[15]}',
+        Address = '{update_text_to_table[15]}',
         ZipCode = '{update_text_to_table[16]}'  
         WHERE 
         ID = "{rows}"'''
         self.cur.execute(update)
-        self.conn.commit()
+        self.conn.commit()       
 
     # Get items name
     def get_items_names(self):
         try:
             self.cur.execute("SELECT Name, Login FROM db;")
         except pysqlcipher3.dbapi2.OperationalError:
-            list_names = ['empty']
+            list_names = []
             return list_names
         get_name = self.cur.fetchmany(0)
         list_names = []
@@ -279,7 +331,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
             list_names.append(get_name[_][0] + " (" + get_name[_][1] + ")")
         return list_names
 
-    def change_list_items(self):
+    def change_list_items(self):        
         hide_text_from_changes(self)
         rows = self.ui.listWidget.currentRow() + 1
         texts = self.view_table_by_IDs(str(rows))
@@ -300,13 +352,12 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.ui.textEdit_Code.setPlainText(texts[0][9])
         self.ui.textEdit_Phone.setPlainText(texts[0][10])
         self.ui.textEdit_Recoverycode.setPlainText(texts[0][11])
-        self.ui.textEdit_FIO.setPlainText(texts[0][12])
+        self.ui.textEdit_Full_name.setPlainText(texts[0][12])
         self.ui.textEdit_Country.setPlainText(texts[0][13])
         self.ui.textEdit_State.setPlainText(texts[0][14])
         self.ui.textEdit_City.setPlainText(texts[0][15])
-        self.ui.textEdit_Addres.setPlainText(texts[0][16])
+        self.ui.textEdit_Address.setPlainText(texts[0][16])
         self.ui.textEdit_ZipCode.setPlainText(texts[0][17])
-
 
     def view_table_by_IDs(self, name):
         self.cur = self.conn.cursor()
@@ -330,17 +381,19 @@ class SoyleWindow(QtWidgets.QMainWindow):
             read_json_file.close()
         return data_json
 
-    def create_table_new(self):
+    def upload_in_table_from_json(self):
         global secury_key
         fname = 'db.json'
-        
         try:
             open(fname, 'r')
         except FileNotFoundError:
             return self.statusBar().showMessage('ERR: db.json not found')
 
         self.open_key_DB(secury_key)
-        self.cur.execute('DROP TABLE IF EXISTS db')        
+
+        self.cur.execute('DROP TABLE IF EXISTS db')
+        self.statusBar().showMessage('Database updated from db.json')
+
         self.cur.execute(
             '''CREATE TABLE db (
             id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -355,14 +408,15 @@ class SoyleWindow(QtWidgets.QMainWindow):
             Code VARCHAR(300), 
             Phone VARCHAR(20), 
             Recoverycode VARCHAR(300), 
-            FIO VARCHAR(300), 
+            Full_name VARCHAR(300), 
             Country VARCHAR(100), 
             State VARCHAR(100), 
             City VARCHAR(100), 
-            Addres VARCHAR(300), 
+            Address VARCHAR(300), 
             ZipCode VARCHAR(50)
             );'''
         )
+       
         self.conn.commit()
         fh = self.open_json_file(fname)
         for key, _ in fh.items():
@@ -377,16 +431,16 @@ class SoyleWindow(QtWidgets.QMainWindow):
             Code = fh[key][0]["Code"]
             Phone = fh[key][0]["Phone"]
             Recoverycode = fh[key][0]["Recovery code"]
-            FIO = fh[key][0]["FIO"]
+            Full_name = fh[key][0]["Full_name"]
             Country = fh[key][0]["Country"]
             State = fh[key][0]["State"]
             City = fh[key][0]["City"]
-            Addres = fh[key][0]["Addres"]
+            Address = fh[key][0]["Address"]
             ZipCode = fh[key][0]["Zip Code"]
             self.cur.execute(
-                '''INSERT INTO db ( Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode ) 
+                '''INSERT INTO db ( Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, Full_name, Country, State, City, Address, ZipCode ) 
                 VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );''',
-                (Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode))
+                (Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, Full_name, Country, State, City, Address, ZipCode))
         self.conn.commit()
         self.cur.close()
 
