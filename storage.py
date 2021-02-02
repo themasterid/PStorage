@@ -79,17 +79,12 @@ class SoyleWindow(QtWidgets.QMainWindow):
         super(SoyleWindow, self).__init__()
         self.ui = Ui_MyWindow()
         self.ui.setupUi(self)
-        #global key
-        self.open_key_DB(secury_key) # decrypt the table using the key
-        # Create table first, second comment this strings in the future, 
-        # do not download data from json, but through the GUI form.
-        
+        self.open_key_DB(secury_key) # decrypt the table using the key      
         self.ui.pushButton_Update_All_Table.clicked.connect(self.create_table_new)
         self.ui.listWidget.setCurrentRow(0)
         self.ui.listWidget.addItems(self.get_items_names())
         hide_text_from_changes(self)
-        self.ui.listWidget.currentRowChanged.connect(self.change_list_items)      
-
+        self.ui.listWidget.currentRowChanged.connect(self.change_list_items)
         btns_get_text_click(self)
         btns_edit_click(self) # edit from base
         btns_save_click(self) # save in base
@@ -216,61 +211,58 @@ class SoyleWindow(QtWidgets.QMainWindow):
             hide_text_from_changes(self)
             self.ui.textEdit_ZipCode.setDisabled(False)
 
-    def update_table(self):
+    def get_text_to_save_table(self):
         hide_text_from_changes(self)
-        rows = self.ui.listWidget.currentRow()
+        rows = self.ui.listWidget.currentRow() + 1
         texts = self.view_table_by_IDs(str(rows))
-        new_names_text = tuple()
-        new_names_text += (rows,)
-        new_names_text += (self.ui.textEdit_Name.toPlainText(),)
-        new_names_text += (self.ui.textEdit_Login.toPlainText(),)
-        new_names_text += (self.ui.textEdit_Password.toPlainText(),)
-        new_names_text += (self.ui.textEdit_OldPassword.toPlainText(),)
-        new_names_text += (self.ui.textEdit_Email.toPlainText(),)
-        new_names_text += (self.ui.textEdit_OldEmail.toPlainText(),)
-        new_names_text += (self.ui.textEdit_Quation.toPlainText(),)
-        new_names_text += (self.ui.textEdit_Answer.toPlainText(),)
-        new_names_text += (self.ui.textEdit_Code.toPlainText(),)
-        new_names_text += (self.ui.textEdit_Phone.toPlainText(),)
-        new_names_text += (self.ui.textEdit_Recoverycode.toPlainText(),)
-        new_names_text += (self.ui.textEdit_FIO.toPlainText(),)
-        new_names_text += (self.ui.textEdit_Country.toPlainText(),)
-        new_names_text += (self.ui.textEdit_State.toPlainText(),)
-        new_names_text += (self.ui.textEdit_City.toPlainText(),)
-        new_names_text += (self.ui.textEdit_Addres.toPlainText(),)
-        new_names_text += (self.ui.textEdit_ZipCode.toPlainText(),)
-        if [new_names_text] == texts:
+        update_text_to_table = tuple()
+        update_text_to_table += (self.ui.textEdit_Name.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Login.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Password.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_OldPassword.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Email.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_OldEmail.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Quation.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Answer.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Code.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Phone.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Recoverycode.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_FIO.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Country.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_State.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_City.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_Addres.toPlainText(),)
+        update_text_to_table += (self.ui.textEdit_ZipCode.toPlainText(),)
+
+        if [(rows, ) + update_text_to_table] == texts:
             self.statusBar().showMessage('Изменения не внесены')
         else:
-            self.update_to_table(new_names_text)
-            sender = self.sender()
-            self.statusBar().showMessage('Изменения внесены ' +
-                                         str(sender.objectName().split('_')[1]))
+            self.update_to_table(update_text_to_table)
+            self.statusBar().showMessage('Изменения внесены')
 
-    def update_to_table(self, new_names_text):
+    def update_to_table(self, update_text_to_table):
         self.cur = self.conn.cursor()
-        rows = self.ui.listWidget.currentRow()
-        update = f'''UPDATE db SET
-        id = '{new_names_text[0]}', 
-        Name = '{new_names_text[1]}',
-        Login = '{new_names_text[2]}',
-        Password = '{new_names_text[3]}',
-        OldPassword = '{new_names_text[4]}',
-        Email = '{new_names_text[5]}',
-        OldEmail = '{new_names_text[6]}',
-        Quation = '{new_names_text[7]}',
-        Answer = "{new_names_text[8]}",
-        Code = '{new_names_text[9]}',
-        Phone = '{new_names_text[10]}',
-        Recoverycode = '{new_names_text[11]}',
-        FIO = '{new_names_text[12]}',
-        Country = '{new_names_text[13]}',
-        State = '{new_names_text[14]}',
-        City = '{new_names_text[15]}',
-        Addres = '{new_names_text[16]}',
-        ZipCode = '{new_names_text[17]}'  
+        rows = self.ui.listWidget.currentRow() + 1
+        update = f'''UPDATE db SET         
+        Name = '{update_text_to_table[0]}',
+        Login = '{update_text_to_table[1]}',
+        Password = '{update_text_to_table[2]}',
+        OldPassword = '{update_text_to_table[3]}',
+        Email = '{update_text_to_table[4]}',
+        OldEmail = '{update_text_to_table[5]}',
+        Quation = '{update_text_to_table[6]}',
+        Answer = "{update_text_to_table[7]}",
+        Code = '{update_text_to_table[8]}',
+        Phone = '{update_text_to_table[9]}',
+        Recoverycode = '{update_text_to_table[10]}',
+        FIO = '{update_text_to_table[11]}',
+        Country = '{update_text_to_table[12]}',
+        State = '{update_text_to_table[13]}',
+        City = '{update_text_to_table[14]}',
+        Addres = '{update_text_to_table[15]}',
+        ZipCode = '{update_text_to_table[16]}'  
         WHERE 
-        ID == {rows};'''
+        ID = "{rows}"'''
         self.cur.execute(update)
         self.conn.commit()
 
@@ -289,12 +281,14 @@ class SoyleWindow(QtWidgets.QMainWindow):
 
     def change_list_items(self):
         hide_text_from_changes(self)
-        rows = self.ui.listWidget.currentRow()
+        rows = self.ui.listWidget.currentRow() + 1
         texts = self.view_table_by_IDs(str(rows))
+
         try:
             self.ui.textEdit_Name.setPlainText(texts[0][1])
         except TypeError:
             return
+
         self.ui.textEdit_Name.setPlainText(texts[0][1])
         self.ui.textEdit_Login.setPlainText(texts[0][2])
         self.ui.textEdit_Password.setPlainText(texts[0][3])
@@ -313,13 +307,15 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.ui.textEdit_Addres.setPlainText(texts[0][16])
         self.ui.textEdit_ZipCode.setPlainText(texts[0][17])
 
+
     def view_table_by_IDs(self, name):
         self.cur = self.conn.cursor()
         try:
-            self.cur.execute("SELECT * FROM db WHERE ID = '{0}';".format(name))
+            self.cur.execute(f"SELECT * FROM db WHERE ID = {name}")
         except pysqlcipher3.dbapi2.OperationalError:
             return
-        return self.cur.fetchmany(0)
+        texts = self.cur.fetchmany(0)
+        return texts
 
     def open_json_file(self, fname):
         self.fname = fname
@@ -347,10 +343,24 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.cur.execute('DROP TABLE IF EXISTS db')        
         self.cur.execute(
             '''CREATE TABLE db (
-            id INT AUTO_INCREMENT NOT NULL, Name VARCHAR(100), Login VARCHAR(100), Password VARCHAR(100), OldPassword VARCHAR(100), Email VARCHAR(300),
-            OldEmail VARCHAR(100), Quation VARCHAR(300), Answer VARCHAR(300), Code VARCHAR(300), Phone VARCHAR(20), Recoverycode VARCHAR(300), 
-            FIO VARCHAR(300), Country VARCHAR(100), State VARCHAR(100), City VARCHAR(100), Addres VARCHAR(300), ZipCode VARCHAR(50),
-            PRIMARY KEY (id)
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            Name VARCHAR(100), 
+            Login VARCHAR(100), 
+            Password VARCHAR(100), 
+            OldPassword VARCHAR(100), 
+            Email VARCHAR(300),
+            OldEmail VARCHAR(100), 
+            Quation VARCHAR(300), 
+            Answer VARCHAR(300), 
+            Code VARCHAR(300), 
+            Phone VARCHAR(20), 
+            Recoverycode VARCHAR(300), 
+            FIO VARCHAR(300), 
+            Country VARCHAR(100), 
+            State VARCHAR(100), 
+            City VARCHAR(100), 
+            Addres VARCHAR(300), 
+            ZipCode VARCHAR(50)
             );'''
         )
         self.conn.commit()
@@ -374,9 +384,9 @@ class SoyleWindow(QtWidgets.QMainWindow):
             Addres = fh[key][0]["Addres"]
             ZipCode = fh[key][0]["Zip Code"]
             self.cur.execute(
-                '''INSERT INTO db ( id, Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode ) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );''',
-                (int(key), Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode))
+                '''INSERT INTO db ( Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode ) 
+                VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );''',
+                (Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, FIO, Country, State, City, Addres, ZipCode))
         self.conn.commit()
         self.cur.close()
 
