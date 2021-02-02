@@ -321,7 +321,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.fname = fname
 
         try:
-            file = open(fname, 'r')
+            open(fname, 'r')
         except FileNotFoundError:
             return self.statusBar().showMessage('ERR: db.json not found')
 
@@ -335,7 +335,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
         fname = 'db.json'
         
         try:
-            file = open(fname, 'r')
+            open(fname, 'r')
         except FileNotFoundError:
             return self.statusBar().showMessage('ERR: db.json not found')
 
