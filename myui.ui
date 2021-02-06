@@ -51,6 +51,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="currentRow">
+     <number>-1</number>
+    </property>
    </widget>
    <widget class="QTextEdit" name="textEdit_Name">
     <property name="geometry">

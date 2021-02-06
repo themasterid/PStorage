@@ -4,6 +4,7 @@ import pysqlcipher3
 import json
 from funcs.myui import Ui_MyWindow
 from PyQt5 import QtWidgets, QtCore, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 import sys
 from funcs.functions import hide_text_from_changes, btns_edit_click, btns_save_click, btns_get_text_click
 
@@ -81,16 +82,50 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.open_key_DB(secury_key) # decrypt the table using the key      
         self.ui.pushButton_Update_All_Table.clicked.connect(self.upload_in_table_from_json)
-        self.ui.listWidget.setCurrentRow(0)
         self.ui.listWidget.addItems(self.get_items_names())
+        self.ui.listWidget.setCurrentRow(0)
+        self.ui.listWidget.itemDoubleClicked.connect(self.delete_account)
+        self.ui.listWidget.selectedItems()
         self.ui.pushButton_ADD_ACCOUNT.clicked.connect(self.create_new_account)
         hide_text_from_changes(self)
         self.ui.listWidget.currentRowChanged.connect(self.change_list_items)
+        self.ui.pushButton_DELETE_ACCOUNT.clicked.connect(self.delete_account)
         btns_get_text_click(self)
         btns_edit_click(self) # edit from base
         btns_save_click(self) # save in base
-
         self.cur.close()
+
+    def delete_account(self):
+        global secury_key
+        self.open_key_DB(secury_key)
+
+        try:
+            delete_row = self.get_items_names()[self.ui.listWidget.currentRow()].split(' ')[0]
+            okornot = self.get_items_names()[self.ui.listWidget.currentRow()]
+        except IndexError:
+            return self.statusBar().showMessage('ERR: Empty DB')
+
+        buttonReply = QMessageBox.question(self, 'Allert!', f'Delete "{okornot}?"', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if buttonReply == QMessageBox.Yes:
+            self.cur.execute(f'''
+            DELETE FROM db
+            WHERE id = {delete_row};
+            ''')
+            self.conn.commit()
+
+            self.cur.execute(f'''
+            SELECT id FROM db WHERE id = {delete_row};
+            ''')
+            get_info = self.cur.fetchmany(0)
+            if get_info == []:
+                self.ui.listWidget.clear()
+                self.ui.listWidget.addItems(self.get_items_names())
+                self.cur.close()
+                return self.statusBar().showMessage(f'OK: id {delete_row} удален!')
+            return self.statusBar().showMessage(f'OK: "{okornot}?" delete!') 
+        else:
+            return self.statusBar().showMessage(f'OK: id {delete_row} not delete!')           
+
 
     def create_new_account(self):
         global secury_key
@@ -117,31 +152,31 @@ class SoyleWindow(QtWidgets.QMainWindow):
             ZipCode VARCHAR(50)
             );'''
         )
-
-        Name = 'Edit'
-        Login = 'Me'
-        Password = 'None'
-        OldPassword = 'None'
-        Email = 'None'
-        OldEmail = 'None'
-        Quation = 'None'
-        Answer = 'None'
-        Code = 'None'
-        Phone = 'None'
-        Recoverycode = 'None'
-        Full_name = 'None'
-        Country = 'None'
-        State = 'None'
-        City = 'None'
-        Address = 'None'
-        ZipCode = 'None'
+        Name = '---'
+        Login = '---'
+        Password = '---'
+        OldPassword = '---'
+        Email = '---'
+        OldEmail = '---'
+        Quation = '---'
+        Answer = '---'
+        Code = '---'
+        Phone = '---'
+        Recoverycode = '---'
+        Full_name = '---'
+        Country = '---'
+        State = '---'
+        City = '---'
+        Address = '---'
+        ZipCode = '---'
         self.cur.execute(
             '''INSERT INTO db ( Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, Full_name, Country, State, City, Address, ZipCode )
             VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );''',
             (Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, Full_name, Country, State, City, Address, ZipCode))
         self.conn.commit()
+        self.ui.listWidget.clear()
+        self.ui.listWidget.addItems(self.get_items_names())
         self.cur.close()
-    # ------------------------------------------------------------------------------------
     
     def open_key_DB(self, secury_key):        
         self.conn = sqlite3.connect('')
@@ -266,7 +301,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
     def get_text_to_save_table(self):
         hide_text_from_changes(self)
         rows = self.ui.listWidget.currentRow() + 1
-        texts = self.view_table_by_IDs(str(rows))
+        texts = self.view_table_by_IDs(str(rows + self.ui.listWidget.count() + 1))
         update_text_to_table = tuple()
         update_text_to_table += (self.ui.textEdit_Name.toPlainText(),)
         update_text_to_table += (self.ui.textEdit_Login.toPlainText(),)
@@ -285,12 +320,12 @@ class SoyleWindow(QtWidgets.QMainWindow):
         update_text_to_table += (self.ui.textEdit_City.toPlainText(),)
         update_text_to_table += (self.ui.textEdit_Address.toPlainText(),)
         update_text_to_table += (self.ui.textEdit_ZipCode.toPlainText(),)
-
+        
         if [(rows, ) + update_text_to_table] == texts:
             self.statusBar().showMessage('No changes have been made. No changes.')
-        else:
+        else:                      
             self.update_to_table(update_text_to_table)
-            self.statusBar().showMessage('Saved to the database')
+            return self.statusBar().showMessage('Saved to the database')
 
     def update_to_table(self, update_text_to_table):
         self.cur = self.conn.cursor()
@@ -316,31 +351,35 @@ class SoyleWindow(QtWidgets.QMainWindow):
         WHERE 
         ID = "{rows}"'''
         self.cur.execute(update)
-        self.conn.commit()       
+        self.conn.commit()
+        self.ui.listWidget.clear()            
+        self.ui.listWidget.addItems(self.get_items_names())
 
     # Get items name
     def get_items_names(self):
         try:
-            self.cur.execute("SELECT Name, Login FROM db;")
+            self.cur.execute("SELECT id, Name, Login FROM db;")
         except pysqlcipher3.dbapi2.OperationalError:
             list_names = []
             return list_names
         get_name = self.cur.fetchmany(0)
         list_names = []
         for _ in range(len(get_name)):
-            list_names.append(get_name[_][0] + " (" + get_name[_][1] + ")")
+            list_names.append(str(get_name[_][0]) + " " + get_name[_][1] + " " + get_name[_][2])
         return list_names
 
     def change_list_items(self):        
         hide_text_from_changes(self)
         rows = self.ui.listWidget.currentRow() + 1
         texts = self.view_table_by_IDs(str(rows))
-
         try:
             self.ui.textEdit_Name.setPlainText(texts[0][1])
         except TypeError:
-            return
-
+            return self.statusBar().showMessage('TypeError')
+        except IndexError:
+            #self.ui.listWidget.setCurrentRow(rows + self.ui.listWidget.count() + 1)
+            #texts = self.view_table_by_IDs(str(rows + self.ui.listWidget.count() + 1))
+            return self.statusBar().showMessage('IndexError')
         self.ui.textEdit_Name.setPlainText(texts[0][1])
         self.ui.textEdit_Login.setPlainText(texts[0][2])
         self.ui.textEdit_Password.setPlainText(texts[0][3])
@@ -358,6 +397,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.ui.textEdit_City.setPlainText(texts[0][15])
         self.ui.textEdit_Address.setPlainText(texts[0][16])
         self.ui.textEdit_ZipCode.setPlainText(texts[0][17])
+        return
 
     def view_table_by_IDs(self, name):
         self.cur = self.conn.cursor()
@@ -442,6 +482,8 @@ class SoyleWindow(QtWidgets.QMainWindow):
                 VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );''',
                 (Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, Full_name, Country, State, City, Address, ZipCode))
         self.conn.commit()
+        self.ui.listWidget.clear()
+        self.ui.listWidget.addItems(self.get_items_names())
         self.cur.close()
 
 def main():
