@@ -54,7 +54,7 @@ class MainWindow(QtWidgets.QWidget):
             self.cur.close()
         except pysqlcipher3.dbapi2.OperationalError: # table is not create, create table            
             newtable = SoyleWindow()
-            newtable.create_table_new()
+            newtable.create_new_table()
         except pysqlcipher3.dbapi2.DatabaseError: # key is not valid            
             return self.statusBar.showMessage('ERR: KEY NOT FOUND')
         return self.switch_on_soylewindow.emit(self.line_edit_login.text())
@@ -84,7 +84,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
         # Create table first, second comment this strings in the future, 
         # do not download data from json, but through the GUI form.
         
-        self.ui.pushButton_Update_All_Table.clicked.connect(self.create_table_new)
+        self.ui.pushButton_Update_All_Table.clicked.connect(self.create_new_table)
         self.ui.listWidget.setCurrentRow(0)
         self.ui.listWidget.addItems(self.get_items_names())
         hide_text_from_changes(self)
@@ -334,7 +334,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
             read_json_file.close()
         return data_json
 
-    def create_table_new(self):
+    def create_new_table(self):
         global secury_key
         fname = 'db.json'
         
@@ -346,7 +346,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.open_key_DB(secury_key)
         self.cur.execute('DROP TABLE IF EXISTS db')        
         self.cur.execute(
-            '''CREATE TABLE db (
+            '''CREATE TABLE IF NOT EXISTS db (
             id INT AUTO_INCREMENT NOT NULL, Name VARCHAR(100), Login VARCHAR(100), Password VARCHAR(100), OldPassword VARCHAR(100), Email VARCHAR(300),
             OldEmail VARCHAR(100), Quation VARCHAR(300), Answer VARCHAR(300), Code VARCHAR(300), Phone VARCHAR(20), Recoverycode VARCHAR(300), 
             FIO VARCHAR(300), Country VARCHAR(100), State VARCHAR(100), City VARCHAR(100), Addres VARCHAR(300), ZipCode VARCHAR(50),
