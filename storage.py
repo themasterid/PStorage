@@ -20,7 +20,9 @@ class MainWindow(QtWidgets.QWidget):
         self.resize(280, 100)
         layout = QtWidgets.QGridLayout()
 
+
         self.line_edit_login = QtWidgets.QLineEdit()
+        self.line_edit_login.setEchoMode(QtWidgets.QLineEdit.Password)
         self.line_edit_login.setGeometry(QtCore.QRect(30, 20, 221, 20))
         layout.addWidget(self.line_edit_login)
 
@@ -90,10 +92,56 @@ class SoyleWindow(QtWidgets.QMainWindow):
         hide_text_from_changes(self)
         self.ui.listWidget.currentRowChanged.connect(self.change_list_items)
         self.ui.pushButton_DELETE_ACCOUNT.clicked.connect(self.delete_account)
+        self.ui.pushButton_save_json.clicked.connect(self.save_json)
         btns_get_text_click(self)
         btns_edit_click(self) # edit from base
         btns_save_click(self) # save in base
         self.cur.close()
+
+    def save_json(self):
+        buttonReply = QMessageBox.question(self, 'Allert!', f'Save db to disc?"', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if buttonReply == QMessageBox.Yes:
+            self.cur = self.conn.cursor()
+            try:
+                self.cur.execute(f"SELECT * FROM db")
+            except pysqlcipher3.dbapi2.OperationalError:
+                return
+            texts = self.cur.fetchmany(0)
+            new_dict = dict()
+            for _ in range(len(texts)):
+                json_format = (
+                    {f"{texts[_][0] - 1}":
+                    [
+                        {
+                            "Name": f"{texts[_][1]}",
+                            "Login": f"{texts[_][2]}",
+                            "Password": f"{texts[_][3]}",
+                            "Old Password": f"{texts[_][4]}",
+                            "Email": f"{texts[_][5]}",
+                            "Old Email": f"{texts[_][6]}",
+                            "Quation": f"{texts[_][7]}",
+                            "Answer": f"{texts[_][8]}",
+                            "Code": f"{texts[_][9]}",
+                            "Phone": f"{texts[_][10]}",
+                            "Recovery code": f"{texts[_][11]}",
+                            "Full_name": f"{texts[_][12]}",
+                            "Country": f"{texts[_][13]}",
+                            "State": f"{texts[_][14]}",
+                            "City": f"{texts[_][15]}",
+                            "Address": f"{texts[_][16]}",
+                            "Zip Code": f"{texts[_][17]}",
+                        }
+                    ]
+                    }
+                )
+                new_dict.update(json_format)
+            
+            text_json = 'db.json'
+            self.write_json_file(new_dict, text_json)
+            return self.statusBar().showMessage(f'OK: db save to {text_json}!')
+        else:
+            text_json = 'db.json'
+            return self.statusBar().showMessage(f'OK: db not save to {text_json}!') 
 
     def delete_account(self):
         global secury_key
@@ -125,7 +173,6 @@ class SoyleWindow(QtWidgets.QMainWindow):
             return self.statusBar().showMessage(f'OK: "{okornot}?" delete!') 
         else:
             return self.statusBar().showMessage(f'OK: id {delete_row} not delete!')           
-
 
     def create_new_account(self):
         global secury_key
@@ -485,6 +532,14 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.ui.listWidget.clear()
         self.ui.listWidget.addItems(self.get_items_names())
         self.cur.close()
+
+    def write_json_file(self, date_to_write, fname):
+        self.date_to_write = date_to_write
+        self.fname = fname
+        with open(self.fname, 'w', encoding='utf-8') as json_file:
+            json.dump(self.date_to_write, json_file,
+                      ensure_ascii=False, indent=4)
+            json_file.close()
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
