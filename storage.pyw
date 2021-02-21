@@ -85,7 +85,6 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.open_key_DB(secury_key) # decrypt the table using the key      
         self.ui.pushButton_Update_All_Table.clicked.connect(self.upload_in_table_from_json)
         self.ui.listWidget.addItems(self.get_items_names())
-        self.ui.listWidget.setCurrentRow(0)
         self.ui.listWidget.itemDoubleClicked.connect(self.delete_account)
         self.ui.listWidget.selectedItems()
         self.ui.pushButton_ADD_ACCOUNT.clicked.connect(self.create_new_account)
