@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QMessageBox
 import sys
 from funcs.functions import hide_text_from_changes, btns_edit_click, btns_save_click, btns_get_text_click
 
+
 class MainWindow(QtWidgets.QWidget):
 
     switch_on_soylewindow = QtCore.pyqtSignal(str)
@@ -143,7 +144,6 @@ class SoyleWindow(QtWidgets.QMainWindow):
             return self.statusBar().showMessage(f'OK: db not save to {text_json}!') 
 
     def delete_account(self):
-        global secury_key
         self.open_key_DB(secury_key)
 
         try:
@@ -174,7 +174,6 @@ class SoyleWindow(QtWidgets.QMainWindow):
             return self.statusBar().showMessage(f'OK: id {delete_row} not delete!')           
 
     def create_new_account(self):
-        global secury_key
         self.open_key_DB(secury_key)   
         self.cur.execute(
             '''CREATE TABLE IF NOT EXISTS db (
@@ -468,7 +467,6 @@ class SoyleWindow(QtWidgets.QMainWindow):
         return data_json
 
     def upload_in_table_from_json(self):
-        global secury_key
         fname = 'db.json'
         try:
             open(fname, 'r')
