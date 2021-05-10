@@ -462,9 +462,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
             return self.statusBar().showMessage('ERR: db.json not found')
 
         with open(self.fname, 'r', encoding='utf-8') as read_json_file:
-            data_json = json.load(read_json_file)
-            read_json_file.close()
-        return data_json
+            return json.load(read_json_file)
 
     def upload_in_table_from_json(self):
         fname = 'db.json'
@@ -536,7 +534,6 @@ class SoyleWindow(QtWidgets.QMainWindow):
         with open(self.fname, 'w', encoding='utf-8') as json_file:
             json.dump(self.date_to_write, json_file,
                       ensure_ascii=False, indent=4)
-            json_file.close()
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
