@@ -1,7 +1,7 @@
 def hide_text_from_changes(self):
     self.ui.textEdit_Name.setDisabled(True)
     self.ui.textEdit_Login.setDisabled(True)
-    self.ui.textEdit_Password.setDisabled(True)       
+    self.ui.textEdit_Password.setDisabled(True)
     self.ui.textEdit_OldPassword.setDisabled(True)
     self.ui.textEdit_Email.setDisabled(True)
     self.ui.textEdit_OldEmail.setDisabled(True)
@@ -18,8 +18,8 @@ def hide_text_from_changes(self):
     self.ui.textEdit_ZipCode.setDisabled(True)
 
 
-def btns_edit_click(self):    
-    self.ui.pushButton_Name_Edit.clicked.connect(self.who_btn_clicked) 
+def btns_edit_click(self):
+    self.ui.pushButton_Name_Edit.clicked.connect(self.who_btn_clicked)
     self.ui.pushButton_Login_Edit.clicked.connect(self.who_btn_clicked)
     self.ui.pushButton_Password_Edit.clicked.connect(self.who_btn_clicked)
     self.ui.pushButton_OldPassword_Edit.clicked.connect(self.who_btn_clicked)
@@ -39,26 +39,44 @@ def btns_edit_click(self):
 
 
 def btns_save_click(self):
-    self.ui.pushButton_Name_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_Login_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_Password_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_OldPassword_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_Email_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_OldEmail_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_Quation_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_Answer_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_Code_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_Phone_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_Recoverycode_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_Full_name_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_Country_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_State_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_City_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_Address_Save.clicked.connect(self.get_text_to_save_table)
-    self.ui.pushButton_ZipCode_Save.clicked.connect(self.get_text_to_save_table)
+    self.ui.pushButton_Name_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_Login_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_Password_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_OldPassword_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_Email_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_OldEmail_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_Quation_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_Answer_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_Code_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_Phone_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_Recoverycode_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_Full_name_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_Country_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_State_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_City_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_Address_Save.clicked.connect(
+        self.get_text_to_save_table)
+    self.ui.pushButton_ZipCode_Save.clicked.connect(
+        self.get_text_to_save_table)
+
 
 def btns_get_text_click(self):
-    self.ui.pushButton_Name_Get.clicked.connect(self.copy_from_text) 
+    self.ui.pushButton_Name_Get.clicked.connect(self.copy_from_text)
     self.ui.pushButton_Login_Get.clicked.connect(self.copy_from_text)
     self.ui.pushButton_Password_Get.clicked.connect(self.copy_from_text)
     self.ui.pushButton_OldPassword_Get.clicked.connect(self.copy_from_text)

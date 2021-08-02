@@ -18,7 +18,8 @@ class Ui_MyWindow(object):
         MyWindow.setMinimumSize(QtCore.QSize(921, 742))
         MyWindow.setMaximumSize(QtCore.QSize(921, 742))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("funcs/icon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(
+            "funcs/icon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MyWindow.setWindowIcon(icon)
         MyWindow.setAnimated(False)
         self.centralwidget = QtWidgets.QWidget(MyWindow)
@@ -135,7 +136,8 @@ class Ui_MyWindow(object):
         self.label_Quation.setFont(font)
         self.label_Quation.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.label_Quation.setText("")
-        self.label_Quation.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_Quation.setAlignment(
+            QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_Quation.setObjectName("label_Quation")
         self.textEdit_Answer = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit_Answer.setGeometry(QtCore.QRect(131, 330, 298, 34))

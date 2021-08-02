@@ -2,11 +2,12 @@ import json
 import sys
 
 import pysqlcipher3
-from pysqlcipher3 import dbapi2 as sqlite3
 
-from funcs.myui import Ui_MyWindow
+from pysqlcipher3 import dbapi2 as sqlite3
 from PyQt5 import QtWidgets, QtCore, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
+
+from funcs.myui import Ui_MyWindow
 
 from funcs.functions import hide_text_from_changes, btns_edit_click 
 from funcs.functions import btns_save_click, btns_get_text_click
@@ -119,28 +120,29 @@ class SoyleWindow(QtWidgets.QMainWindow):
             new_dict = dict()
             for _ in range(len(texts)):
                 json_format = (
-                    {f"{texts[_][0] - 1}":
-                    [
-                        {
-                            "Name": f"{texts[_][1]}",
-                            "Login": f"{texts[_][2]}",
-                            "Password": f"{texts[_][3]}",
-                            "Old Password": f"{texts[_][4]}",
-                            "Email": f"{texts[_][5]}",
-                            "Old Email": f"{texts[_][6]}",
-                            "Quation": f"{texts[_][7]}",
-                            "Answer": f"{texts[_][8]}",
-                            "Code": f"{texts[_][9]}",
-                            "Phone": f"{texts[_][10]}",
-                            "Recovery code": f"{texts[_][11]}",
-                            "Full_name": f"{texts[_][12]}",
-                            "Country": f"{texts[_][13]}",
-                            "State": f"{texts[_][14]}",
-                            "City": f"{texts[_][15]}",
-                            "Address": f"{texts[_][16]}",
-                            "Zip Code": f"{texts[_][17]}",
-                        }
-                    ]
+                    {
+                        f"{texts[_][0] - 1}":
+                        [
+                            {
+                                "Name": f"{texts[_][1]}",
+                                "Login": f"{texts[_][2]}",
+                                "Password": f"{texts[_][3]}",
+                                "Old Password": f"{texts[_][4]}",
+                                "Email": f"{texts[_][5]}",
+                                "Old Email": f"{texts[_][6]}",
+                                "Quation": f"{texts[_][7]}",
+                                "Answer": f"{texts[_][8]}",
+                                "Code": f"{texts[_][9]}",
+                                "Phone": f"{texts[_][10]}",
+                                "Recovery code": f"{texts[_][11]}",
+                                "Full_name": f"{texts[_][12]}",
+                                "Country": f"{texts[_][13]}",
+                                "State": f"{texts[_][14]}",
+                                "City": f"{texts[_][15]}",
+                                "Address": f"{texts[_][16]}",
+                                "Zip Code": f"{texts[_][17]}",
+                            }
+                        ]
                     }
                 )
                 new_dict.update(json_format)
@@ -214,23 +216,23 @@ class SoyleWindow(QtWidgets.QMainWindow):
             ZipCode VARCHAR(50)
             );'''
         )
-        Name = '---'
-        Login = '---'
-        Password = '---'
-        OldPassword = '---'
-        Email = '---'
-        OldEmail = '---'
-        Quation = '---'
-        Answer = '---'
-        Code = '---'
-        Phone = '---'
-        Recoverycode = '---'
-        Full_name = '---'
-        Country = '---'
-        State = '---'
-        City = '---'
-        Address = '---'
-        ZipCode = '---'
+        name = '---'
+        login = '---'
+        password = '---'
+        oldpassword = '---'
+        email = '---'
+        oldemail = '---'
+        quation = '---'
+        answer = '---'
+        code = '---'
+        phone = '---'
+        recoverycode = '---'
+        full_name = '---'
+        country = '---'
+        state = '---'
+        city = '---'
+        address = '---'
+        zipcode = '---'
         self.cur.execute(
             '''INSERT INTO db (
                 Name,
@@ -270,33 +272,28 @@ class SoyleWindow(QtWidgets.QMainWindow):
                     ?
                 );''',
             (
-                Name,
-                Login,
-                Password,
-                OldPassword,
-                Email, OldEmail,
-                Quation,
-                Answer,
-                Code,
-                Phone,
-                Recoverycode,
-                Full_name,
-                Country,
-                State,
-                City,
-                Address,
-                ZipCode
-            )
-        )
+                name,
+                login,
+                password,
+                oldpassword,
+                email,
+                oldemail,
+                quation,
+                answer,
+                code,
+                phone,
+                recoverycode,
+                full_name,
+                country,
+                state,
+                city,
+                address,
+                zipcode
+            ))
         self.conn.commit()
         self.ui.listWidget.clear()
         self.ui.listWidget.addItems(self.get_items_names())
         self.cur.close()
-
-    def open_key_db(self, secury_key):
-        self.conn = sqlite3.connect('')
-        self.cur = self.conn.cursor()
-        self.cur.execute(f"PRAGMA key={secury_key}")
 
     def copy_from_text(self):
         sender_get_copy = self.sender()  # who send signal
@@ -512,7 +509,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.ui.textEdit_City.setPlainText(texts[0][15])
         self.ui.textEdit_Address.setPlainText(texts[0][16])
         self.ui.textEdit_ZipCode.setPlainText(texts[0][17])
-        return
+        return 'done'
 
     def view_table_by_ids(self, name):
         self.cur = self.conn.cursor()
@@ -545,62 +542,116 @@ class SoyleWindow(QtWidgets.QMainWindow):
 
         self.cur.execute(
             '''CREATE TABLE db (
-            id INTEGER PRIMARY KEY AUTOINCREMENT, 
-            Name VARCHAR(100), 
-            Login VARCHAR(100), 
-            Password VARCHAR(100), 
-            OldPassword VARCHAR(100), 
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Name VARCHAR(100),
+            Login VARCHAR(100),
+            Password VARCHAR(100),
+            OldPassword VARCHAR(100),
             Email VARCHAR(300),
-            OldEmail VARCHAR(100), 
-            Quation VARCHAR(300), 
-            Answer VARCHAR(300), 
-            Code VARCHAR(300), 
-            Phone VARCHAR(20), 
-            Recoverycode VARCHAR(300), 
-            Full_name VARCHAR(300), 
-            Country VARCHAR(100), 
-            State VARCHAR(100), 
-            City VARCHAR(100), 
-            Address VARCHAR(300), 
+            OldEmail VARCHAR(100),
+            Quation VARCHAR(300),
+            Answer VARCHAR(300),
+            Code VARCHAR(300),
+            Phone VARCHAR(20),
+            Recoverycode VARCHAR(300),
+            Full_name VARCHAR(300),
+            Country VARCHAR(100),
+            State VARCHAR(100),
+            City VARCHAR(100),
+            Address VARCHAR(300),
             ZipCode VARCHAR(50)
             );'''
         )
-       
+
         self.conn.commit()
         fh = self.open_json_file(fname)
         for key, _ in fh.items():
-            Name = fh[key][0]['Name']
-            Login = fh[key][0]['Login']
-            Password = fh[key][0]['Password']
-            OldPassword = fh[key][0]["Old Password"]
-            Email = fh[key][0]["Email"]
-            OldEmail = fh[key][0]["Old Email"]
-            Quation = fh[key][0]["Quation"]
-            Answer = fh[key][0]["Answer"]
-            Code = fh[key][0]["Code"]
-            Phone = fh[key][0]["Phone"]
-            Recoverycode = fh[key][0]["Recovery code"]
-            Full_name = fh[key][0]["Full_name"]
-            Country = fh[key][0]["Country"]
-            State = fh[key][0]["State"]
-            City = fh[key][0]["City"]
-            Address = fh[key][0]["Address"]
-            ZipCode = fh[key][0]["Zip Code"]
+            name = fh[key][0]['Name']
+            login = fh[key][0]['Login']
+            password = fh[key][0]['Password']
+            oldpassword = fh[key][0]["Old Password"]
+            email = fh[key][0]["Email"]
+            oldemail = fh[key][0]["Old Email"]
+            quation = fh[key][0]["Quation"]
+            answer = fh[key][0]["Answer"]
+            code = fh[key][0]["Code"]
+            phone = fh[key][0]["Phone"]
+            recoverycode = fh[key][0]["Recovery code"]
+            full_name = fh[key][0]["Full_name"]
+            country = fh[key][0]["Country"]
+            state = fh[key][0]["State"]
+            city = fh[key][0]["City"]
+            address = fh[key][0]["Address"]
+            zipcode = fh[key][0]["Zip Code"]
             self.cur.execute(
-                '''INSERT INTO db ( Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, Full_name, Country, State, City, Address, ZipCode ) 
-                VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );''',
-                (Name, Login, Password, OldPassword, Email, OldEmail, Quation, Answer, Code, Phone, Recoverycode, Full_name, Country, State, City, Address, ZipCode))
+                '''INSERT INTO db (
+                    Name,
+                    Login,
+                    Password,
+                    OldPassword,
+                    Email,
+                    OldEmail,
+                    Quation,
+                    Answer,
+                    Code,
+                    Phone,
+                    Recoverycode,
+                    Full_name,
+                    Country,
+                    State,
+                    City,
+                    Address,
+                    ZipCode
+                )
+                VALUES (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?
+                );''',
+                (
+                    name,
+                    login,
+                    password,
+                    oldpassword,
+                    email,
+                    oldemail,
+                    quation,
+                    answer,
+                    code,
+                    phone,
+                    recoverycode,
+                    full_name,
+                    country,
+                    state,
+                    city,
+                    address,
+                    zipcode)
+                )
         self.conn.commit()
         self.ui.listWidget.clear()
         self.ui.listWidget.addItems(self.get_items_names())
         self.cur.close()
+        return 'done'
 
     def write_json_file(self, date_to_write, fname):
-        self.date_to_write = date_to_write
-        self.fname = fname
-        with open(self.fname, 'w', encoding='utf-8') as json_file:
-            json.dump(self.date_to_write, json_file,
+        with open(fname, 'w', encoding='utf-8') as json_file:
+            json.dump(date_to_write, json_file,
                       ensure_ascii=False, indent=4)
+
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
