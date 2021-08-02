@@ -1,8 +1,8 @@
 {
     "0": [
         {
-            "Name": "123",
-            "Login": "None",
+            "Name": "master",
+            "Login": "brootos",
             "Password": "None",
             "Old Password": "None",
             "Email": "None",
@@ -22,7 +22,7 @@
     ],
     "1": [
         {
-            "Name": "None",
+            "Name": "None1",
             "Login": "None",
             "Password": "None",
             "Old Password": "None",
@@ -65,27 +65,6 @@
     "3": [
         {
             "Name": ")",
-            "Login": "---",
-            "Password": "---",
-            "Old Password": "---",
-            "Email": "---",
-            "Old Email": "---",
-            "Quation": "---",
-            "Answer": "---",
-            "Code": "---",
-            "Phone": "---",
-            "Recovery code": "---",
-            "Full_name": "---",
-            "Country": "---",
-            "State": "---",
-            "City": "---",
-            "Address": "---",
-            "Zip Code": "---"
-        }
-    ],
-    "4": [
-        {
-            "Name": "---*",
             "Login": "---",
             "Password": "---",
             "Old Password": "---",
