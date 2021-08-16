@@ -2,8 +2,8 @@ import json
 import sys
 
 import pysqlcipher3
-
 from pysqlcipher3 import dbapi2 as sqlite3
+
 from PyQt5 import QtWidgets, QtCore, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 
@@ -143,8 +143,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
                                 "Zip Code": f"{texts[_][17]}",
                             }
                         ]
-                    }
-                )
+                    } )
                 new_dict.update(json_format)
 
             text_json = 'db.json'
