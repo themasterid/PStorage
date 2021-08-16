@@ -1734,7 +1734,7 @@
      <string>Update ALL TABLE!</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_Change_KEY">
+   <widget class="QPushButton" name="pushButton_save_json">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -1753,7 +1753,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Change KEY</string>
+     <string>Save JSON</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_ADD_ACCOUNT">
