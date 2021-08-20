@@ -2,15 +2,13 @@ import json
 import sys
 
 import pysqlcipher3
-
-from pysqlcipher3 import dbapi2 as sqlite3
-from PyQt5 import QtWidgets, QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
+from pysqlcipher3 import dbapi2 as sqlite3
 
+from funcs.functions import (btns_edit_click, btns_get_text_click,
+                             btns_save_click, hide_text_from_changes)
 from funcs.myui import Ui_MyWindow
-
-from funcs.functions import hide_text_from_changes, btns_edit_click 
-from funcs.functions import btns_save_click, btns_get_text_click
 
 
 class MainWindow(QtWidgets.QWidget):
