@@ -72,9 +72,10 @@ Example:
 
 Go to directory `/SQLCipher/pysqlcipher3`
 
-And in `Native Tools Command Prompt for VS 2019` run:
+And in `Native Tools Command Prompt for VS 2019` run (maybe ypu need https://visualstudio.microsoft.com/visual-cpp-build-tools/):
 ```
->python setup.py build_amalgamation
+python setup.py build_amalgamation
+```
 -----------------------------------------------
 running build_amalgamation
 Builds a C extension using a sqlcipher amalgamation
@@ -84,7 +85,6 @@ Creating library build\temp.win-amd64-3.6\Release\src\python3\_sqlite3.cp36-win_
 Generating code
 Finished generating code
 -----------------------------------------------
-```
    (if you see: 
 ```fatal error C1083: Cannot open include file: 'openssl/rand.h': No such file or directory```
    )
