@@ -41,7 +41,7 @@ class MainWindow(QtWidgets.QWidget):
     def open_key_db(self, secury_key):
         self.conn = sqlite3.connect('database.db')
         self.cur = self.conn.cursor()
-        self.cur.execute(f"PRAGMA key={secury_key}")
+        self.cur.execute(f'PRAGMA key={secury_key}')
 
     def switch(self):
         global secury_key
@@ -55,7 +55,7 @@ class MainWindow(QtWidgets.QWidget):
             return self.statusBar.showMessage('ERR: NOT VALID')
         try:
             self.open_key_db(secury_key)
-            self.cur.execute("SELECT * FROM db;")
+            self.cur.execute('SELECT * FROM db;')
             self.cur.close()
         except pysqlcipher3.dbapi2.OperationalError:
             newtable = SoyleWindow()
@@ -119,7 +119,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
             for _ in range(len(texts)):
                 json_format = (
                     {
-                        f"{texts[_][0] - 1}":
+                        f'{texts[_][0] - 1}':
                         [
                             {
                                 "Name": f"{texts[_][1]}",
@@ -168,26 +168,25 @@ class SoyleWindow(QtWidgets.QMainWindow):
             'Allert!',
             f'Delete {okornot}?',
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if button_reply == QMessageBox.Yes:
-            self.cur.execute(
-                f'DELETE FROM db WHERE id = {delete_row};')
-            self.conn.commit()
-
-            self.cur.execute(
-                f'SELECT id FROM db WHERE id = {delete_row};'
-                )
-            get_info = self.cur.fetchmany(0)
-            if get_info == []:
-                self.ui.listWidget.clear()
-                self.ui.listWidget.addItems(self.get_items_names())
-                self.cur.close()
-                return self.statusBar().showMessage(
-                    f'OK: id {delete_row} удален!')
-            return self.statusBar().showMessage(
-                f'OK: "{okornot}?" delete!')
-        else:
+        if button_reply != QMessageBox.Yes:
             return self.statusBar().showMessage(
                 f'OK: id {delete_row} not delete!')
+        self.cur.execute(
+            f'DELETE FROM db WHERE id = {delete_row};')
+        self.conn.commit()
+
+        self.cur.execute(
+            f'SELECT id FROM db WHERE id = {delete_row};'
+            )
+        get_info = self.cur.fetchmany(0)
+        if get_info == []:
+            self.ui.listWidget.clear()
+            self.ui.listWidget.addItems(self.get_items_names())
+            self.cur.close()
+            return self.statusBar().showMessage(
+                f'OK: id {delete_row} удален!')
+        return self.statusBar().showMessage(
+            f'OK: "{okornot}?" delete!')
 
     def create_new_account(self):
         self.open_key_db(secury_key)
@@ -477,7 +476,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
             for _ in range(len(get_name))
         ]
 
-    def change_list_items(self):
+    def change_list_items(self) -> None:
         hide_text_from_changes(self)
         rows = self.ui.listWidget.currentRow() + 1
         texts = self.view_table_by_ids(str(rows))
@@ -504,7 +503,6 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.ui.textEdit_City.setPlainText(texts[0][15])
         self.ui.textEdit_Address.setPlainText(texts[0][16])
         self.ui.textEdit_ZipCode.setPlainText(texts[0][17])
-        return 'done'
 
     def view_table_by_ids(self, name):
         self.cur = self.conn.cursor()
@@ -564,20 +562,20 @@ class SoyleWindow(QtWidgets.QMainWindow):
             name = fh[key][0]['Name']
             login = fh[key][0]['Login']
             password = fh[key][0]['Password']
-            oldpassword = fh[key][0]["Old Password"]
-            email = fh[key][0]["Email"]
-            oldemail = fh[key][0]["Old Email"]
-            quation = fh[key][0]["Quation"]
-            answer = fh[key][0]["Answer"]
-            code = fh[key][0]["Code"]
-            phone = fh[key][0]["Phone"]
-            recoverycode = fh[key][0]["Recovery code"]
-            full_name = fh[key][0]["Full_name"]
-            country = fh[key][0]["Country"]
-            state = fh[key][0]["State"]
-            city = fh[key][0]["City"]
-            address = fh[key][0]["Address"]
-            zipcode = fh[key][0]["Zip Code"]
+            oldpassword = fh[key][0]['Old Password']
+            email = fh[key][0]['Email']
+            oldemail = fh[key][0]['Old Email']
+            quation = fh[key][0]['Quation']
+            answer = fh[key][0]['Answer']
+            code = fh[key][0]['Code']
+            phone = fh[key][0]['Phone']
+            recoverycode = fh[key][0]['Recovery code']
+            full_name = fh[key][0]['Full_name']
+            country = fh[key][0]['Country']
+            state = fh[key][0]['State']
+            city = fh[key][0]['City']
+            address = fh[key][0]['Address']
+            zipcode = fh[key][0]['Zip Code']
             self.cur.execute(
                 '''INSERT INTO db (
                     Name,
@@ -598,7 +596,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
                     Address,
                     ZipCode
                 )
-                VALUES (
+                VALUES (?, ?, ?,
                     ?,
                     ?,
                     ?,
@@ -609,13 +607,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
                     ?,
                     ?,
                     ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?
+                    ?, ?, ?, ?
                 );''',
                 (
                     name,
@@ -640,7 +632,6 @@ class SoyleWindow(QtWidgets.QMainWindow):
         self.ui.listWidget.clear()
         self.ui.listWidget.addItems(self.get_items_names())
         self.cur.close()
-        return 'done'
 
     def write_json_file(self, date_to_write, fname):
         with open(fname, 'w', encoding='utf-8') as f:
