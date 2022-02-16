@@ -72,7 +72,10 @@ Example:
 
 Go to directory `/SQLCipher/pysqlcipher3`
 
-And in `Native Tools Command Prompt for VS 2019` run (maybe ypu need https://visualstudio.microsoft.com/visual-cpp-build-tools/):
+And in `Native Tools Command Prompt for VS 2019` run (
+maybe you need https://visualstudio.microsoft.com/visual-cpp-build-tools/
+or 
+http://go.microsoft.com/fwlink/?LinkId=691126&fixForIE=.exe.):
 ```
 python setup.py build_amalgamation
 ```
