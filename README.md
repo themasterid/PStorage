@@ -32,7 +32,7 @@ or for x64:
 set LIB=C:\OpenSSL-Win64\lib";%LIB%
 set INCLUDE=C:\OpenSSL-Win64\include";%INCLUDE%
 ```
-4. Install ActiveTcl from https://www.activestate.com/products/tcl/.
+4. Install ActiveTcl from https://platform.activestate.com/ActiveState/ActiveTcl-8.6.
 
 5. Install `Visual Studio 2019` for build 'sqlite3.c' sources.
 
