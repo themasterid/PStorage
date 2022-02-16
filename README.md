@@ -41,7 +41,6 @@ set INCLUDE=C:\OpenSSL-Win64\include";%INCLUDE%
 mkdir SQLCipher
 cd SQLCipher
 git clone https://github.com/sqlcipher/sqlcipher.git
-cd C:\Users\broot\Documents\GitHub\SQLCipher\sqlcipher
 cd sqlcipher
 nmake /f Makefile.msc clean
 nmake /f Makefile.msc
