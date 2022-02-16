@@ -141,7 +141,7 @@ class SoyleWindow(QtWidgets.QMainWindow):
                                 "Zip Code": f"{texts[_][17]}",
                             }
                         ]
-                    } )
+                    })
                 new_dict.update(json_format)
 
             text_json = 'db.json'
@@ -434,9 +434,8 @@ class SoyleWindow(QtWidgets.QMainWindow):
         if [(rows, ) + update_text_to_table] == texts:
             return self.statusBar().showMessage(
                 'No changes have been made. No changes.')
-        else:
-            self.update_to_table(update_text_to_table)
-            return self.statusBar().showMessage('Saved to the database')
+        self.update_to_table(update_text_to_table)
+        return self.statusBar().showMessage('Saved to the database')
 
     def update_to_table(self, update_text_to_table):
         self.cur = self.conn.cursor()
@@ -473,11 +472,10 @@ class SoyleWindow(QtWidgets.QMainWindow):
         except pysqlcipher3.dbapi2.OperationalError:
             return []
         get_name = self.cur.fetchmany(0)
-        list_names = []
-        for _ in range(len(get_name)):
-            list_names.append(str(
-                get_name[_][0]) + " " + get_name[_][1] + " " + get_name[_][2])
-        return list_names
+        return [
+            str(get_name[_][0]) + " " + get_name[_][1] + " " + get_name[_][2]
+            for _ in range(len(get_name))
+        ]
 
     def change_list_items(self):
         hide_text_from_changes(self)
@@ -645,9 +643,13 @@ class SoyleWindow(QtWidgets.QMainWindow):
         return 'done'
 
     def write_json_file(self, date_to_write, fname):
-        with open(fname, 'w', encoding='utf-8') as json_file:
-            json.dump(date_to_write, json_file,
-                      ensure_ascii=False, indent=4)
+        with open(fname, 'w', encoding='utf-8') as f:
+            json.dump(
+                date_to_write,
+                f,
+                ensure_ascii=False,
+                indent=4
+            )
 
 
 def main():
